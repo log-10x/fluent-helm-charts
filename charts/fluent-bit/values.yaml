@@ -21,7 +21,7 @@ image:
   pullPolicy: IfNotPresent
 
 # L1X configuration
-# 
+#
 # NOTE - also look at config.extraFiles lower in this file, as that's part
 # of what defines the config for fluent-bit
 #

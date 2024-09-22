@@ -22,7 +22,7 @@ image:
   tag: ""
 
 # L1X configuration
-# 
+#
 # NOTE - also look at originalFluentOutput which is placed lower in this file,
 # as it's needed along the base fileConfigs of this chart
 #
@@ -106,7 +106,7 @@ l1x:
       #
       00_l1x.conf: |-
         @include "#{ENV['L1X_PATH']}/pipelines/run/modules/input/forwarder/fluentd/conf/l1x-report.conf"
-      
+
       # Controls which events are emitted into the l1x 'reporter'
       # Works by creating a copy, one to send into l1x via the @L1X label, and one to the actual
       # output Fluentd will emit the events to.
@@ -272,7 +272,7 @@ l1x:
       </label>
 
     # REMINDER NOTE - also look at 'originalFluentOutput' for complete configuration
-        
+
 
 ## Optional array of imagePullSecrets containing private registry credentials
 ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
