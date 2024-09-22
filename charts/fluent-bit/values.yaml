@@ -205,7 +205,7 @@ l1x:
     # See https://github.com/fluent/fluent-bit/issues/2020
     #
     l1x-readback.conf: |
-      @INCLUDE /etc/l1x/base-config/pipelines/run/modules/input/forwarder/fluentbit/conf/l1x-unix.conf
+      @INCLUDE /etc/log10x/config/pipelines/run/modules/input/forwarder/fluentbit/conf/l1x-unix.conf
 
     # Emitting generated l1xTemplates ('optimize' only) the l1es_dml index in elastic search.
     # This will allow the L1x Elastic app to decode optimized events.
