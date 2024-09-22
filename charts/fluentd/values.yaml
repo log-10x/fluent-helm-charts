@@ -252,6 +252,9 @@ l1x:
           <buffer>
             flush_interval 10s
           </buffer>
+
+          # Don't wait for elastic to start up.
+          verify_es_version_at_startup false
         </match>
       </label>
 
@@ -268,6 +271,9 @@ l1x:
           password changeme
 
           index_name l1x-internal
+
+          # Don't wait for elastic to start up.
+          verify_es_version_at_startup false
         </match>
       </label>
 
