@@ -32,26 +32,6 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-operator-3.1.0/fluent-operator-3.1.0.tgz
     version: 3.1.0
-  fluentd:
-  - apiVersion: v2
-    appVersion: v1.16.2
-    created: "2024-09-22T20:55:27.917296167Z"
-    description: A Helm chart for Kubernetes
-    digest: f8f45b46b8535f3be21c4b5d31cad066bbd25e82b8169fb73d9b9f159dd36353
-    home: https://www.fluentd.org/
-    icon: https://www.fluentd.org/images/miscellany/fluentd-logo_2x.png
-    maintainers:
-    - email: eduardo@treasure-data.com
-      name: edsiper
-    - email: diogo.filipe.tomas.guerra@cern.ch
-      name: dioguerra
-    name: fluentd
-    sources:
-    - https://github.com/fluent/fluentd/
-    - https://github.com/fluent/fluentd-kubernetes-daemonset
-    urls:
-    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.5.2/fluentd-0.5.2.tgz
-    version: 0.5.2
   log10x-fluent-bit:
   - annotations:
       artifacthub.io/changes: |
