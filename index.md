@@ -9,6 +9,8 @@
 helm repo add log10x-fluent https://log-10x.github.io/fluent-helm-charts
 ```
 
+You can then run `helm search repo log10x-fluent` to see the charts.
+
 ## Install Log10x Fluent-Bit
 
 ```sh
