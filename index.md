@@ -12,7 +12,7 @@ helm repo add log10x-fluent https://log-10x.github.io/fluent-helm-charts
 ## Install Log10x Fluent-Bit
 
 ```sh
-helm upgrade -i log10x-fluent-bit log10x-fluent/fluent-bit
+helm upgrade -i log10x-fluent-bit log10x-fluent/log10x-fluent-bit
 ```
 
 For more details on installing Log10x Fluent-Bit please see the [chart's README](https://github.com/log-10x/fluent-helm-charts/tree/main/charts/fluent-bit).
@@ -20,7 +20,7 @@ For more details on installing Log10x Fluent-Bit please see the [chart's README]
 ## Install Log10x Fluentd
 
 ```sh
-helm upgrade -i log10x-fluentd log10x-fluent/fluentd
+helm upgrade -i log10x-fluentd log10x-fluent/log10x-fluentd
 ```
 
 For more details on installing Log10x Jobs please see the [chart's README](https://github.com/log-10x/fluent-helm-charts/tree/main/charts/fluentd).
