@@ -38,6 +38,31 @@ entries:
         - kind: changed
           description: "Added Log10x integration to fluent-bit"
     apiVersion: v1
+    appVersion: 0.9.2
+    created: "2024-10-09T11:27:40.840372982Z"
+    description: A Helm chart for Kubernetes for Log10x + Fluent-bit forwarders
+    digest: e2a5440b9c8ca5aa7f64f50473c98cf02111535f84af22df0f6ae6165dd9757a
+    home: https://fluentbit.io/
+    icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/fluentd/fluentbit/icon/fluentbit-icon-color.svg
+    keywords:
+    - log10x
+    - logging
+    - fluent-bit
+    - fluentd
+    maintainers:
+    - email: dor.levi@l1x.co
+      name: dor-levi
+    name: log10x-fluent-bit
+    sources:
+    - https://github.com/fluent/fluent-bit/
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/log10x-fluent-bit-0.2.1/log10x-fluent-bit-0.2.1.tgz
+    version: 0.2.1
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: "Added Log10x integration to fluent-bit"
+    apiVersion: v1
     appVersion: 0.9.0
     created: "2024-10-08T21:04:53.458079895Z"
     description: A Helm chart for Kubernetes for Log10x + Fluent-bit forwarders
@@ -84,6 +109,32 @@ entries:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/log10x-fluent-bit-0.1.0/log10x-fluent-bit-0.1.0.tgz
     version: 0.1.0
   log10x-fluentd:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: "Added Log10x integration to fluentd"
+    apiVersion: v2
+    appVersion: 0.9.2
+    created: "2024-10-09T11:27:40.965432853Z"
+    description: A Helm chart for Kubernetes for Log10x + Fluentd forwarders
+    digest: a5ae00a5cd858be30f1b0c6a6778208a956c3c8ad2023056531080a052f14d93
+    home: https://www.fluentd.org/
+    icon: https://www.fluentd.org/images/miscellany/fluentd-logo_2x.png
+    keywords:
+    - log10x
+    - logging
+    - fluent-bit
+    - fluentd
+    maintainers:
+    - email: dor.levi@l1x.co
+      name: dor-levi
+    name: log10x-fluentd
+    sources:
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/log10x-fluentd-0.2.1/log10x-fluentd-0.2.1.tgz
+    version: 0.2.1
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
@@ -136,4 +187,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/log10x-fluentd-0.1.0/log10x-fluentd-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-08T21:04:53.599983401Z"
+generated: "2024-10-09T11:27:40.965483538Z"
