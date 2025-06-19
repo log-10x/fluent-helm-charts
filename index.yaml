@@ -1,2 +1,92 @@
 apiVersion: v1
-entries: {}
+entries:
+  fluent-bit-10x:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: "Added 10x Observability engine integration to fluent-bit"
+    apiVersion: v1
+    appVersion: 0.21.0
+    created: "2025-06-19T15:16:03.52737275Z"
+    description: A Helm chart for Kubernetes for Fluent-bit forwarders + 10x Observability
+      engine
+    digest: e42a624932d3ef61861a8e01aeb7b0bc5edb3fbca2abb998a4843e4f6c23b970
+    home: https://fluentbit.io/
+    icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/fluentd/fluentbit/icon/fluentbit-icon-color.svg
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent-bit
+    - fluentd
+    maintainers:
+    - email: dor.levi@log10x.com
+      name: dor-levi
+    name: fluent-bit-10x
+    sources:
+    - https://github.com/fluent/fluent-bit/
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-bit-10x-0.2.32/fluent-bit-10x-0.2.32.tgz
+    version: 0.2.32
+  fluent-operator:
+  - apiVersion: v2
+    appVersion: 3.1.0
+    created: "2025-06-19T15:16:03.675406048Z"
+    dependencies:
+    - condition: fluentbit.crdsEnable
+      name: fluent-bit-crds
+      repository: file://charts/fluent-bit-crds
+      version: 3.1.0
+    - condition: fluentd.crdsEnable
+      name: fluentd-crds
+      repository: file://charts/fluentd-crds
+      version: 3.1.0
+    description: Fluent Operator provides great flexibility in building a logging
+      layer based on Fluent Bit and Fluentd.
+    digest: 7a8d151f05576fdbed3bf72d03770c8c34c409c1589b1842f66eee30c39c68a1
+    home: https://www.fluentd.org/
+    icon: https://raw.githubusercontent.com/fluent/fluent-operator/master/docs/images/fluent-operator-icon.svg
+    keywords:
+    - logging
+    - fluent-bit
+    - fluentd
+    - operator
+    maintainers:
+    - email: dehaocheng@kubesphere.io
+      name: wenchajun
+    name: fluent-operator
+    sources:
+    - https://github.com/fluent/fluent-operator
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-operator-3.1.0/fluent-operator-3.1.0.tgz
+    version: 3.1.0
+  fluentd-10x:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: "Added 10x Observability engine integration to fluentd"
+    apiVersion: v2
+    appVersion: 0.21.0
+    created: "2025-06-19T15:16:03.87090603Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 2604a0ad14be65ca4861a7f8fad982bb0629796d9542823d8136ec7eb9943f7a
+    home: https://www.fluentd.org/
+    icon: https://www.fluentd.org/images/miscellany/fluentd-logo_2x.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent-bit
+    - fluentd
+    maintainers:
+    - email: dor.levi@log10x.com
+      name: dor-levi
+    name: fluentd-10x
+    sources:
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-10x-0.2.32/fluentd-10x-0.2.32.tgz
+    version: 0.2.32
+generated: "2025-06-19T15:16:03.870931087Z"
