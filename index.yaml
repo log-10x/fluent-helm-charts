@@ -6,6 +6,33 @@ entries:
         - kind: changed
           description: "Added 10x Observability engine integration to fluent-bit"
     apiVersion: v1
+    appVersion: 0.23.1
+    created: "2025-08-02T16:37:41.675625924Z"
+    description: A Helm chart for Kubernetes for Fluent-bit forwarders + 10x Observability
+      engine
+    digest: 143b5525c0b5d2d13de8fc409c4025546c1b90c877abd85785daca2329555038
+    home: https://fluentbit.io/
+    icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/fluentd/fluentbit/icon/fluentbit-icon-color.svg
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent-bit
+    - fluentd
+    maintainers:
+    - email: dor.levi@log10x.com
+      name: dor-levi
+    name: fluent-bit-10x
+    sources:
+    - https://github.com/fluent/fluent-bit/
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-bit-10x-0.2.33/fluent-bit-10x-0.2.33.tgz
+    version: 0.2.33
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: "Added 10x Observability engine integration to fluent-bit"
+    apiVersion: v1
     appVersion: 0.21.0
     created: "2025-06-19T15:16:03.52737275Z"
     description: A Helm chart for Kubernetes for Fluent-bit forwarders + 10x Observability
@@ -66,6 +93,34 @@ entries:
         - kind: changed
           description: "Added 10x Observability engine integration to fluentd"
     apiVersion: v2
+    appVersion: 0.23.1
+    created: "2025-08-02T16:37:41.778654388Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 2581558c04337c3e92bdb4e311f0a59936a90a3695c98221dda37ea4a4804fc5
+    home: https://www.fluentd.org/
+    icon: https://www.fluentd.org/images/miscellany/fluentd-logo_2x.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent-bit
+    - fluentd
+    maintainers:
+    - email: dor.levi@log10x.com
+      name: dor-levi
+    name: fluentd-10x
+    sources:
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-10x-0.2.33/fluentd-10x-0.2.33.tgz
+    version: 0.2.33
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: "Added 10x Observability engine integration to fluentd"
+    apiVersion: v2
     appVersion: 0.21.0
     created: "2025-06-19T15:16:03.87090603Z"
     description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
@@ -89,4 +144,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-10x-0.2.32/fluentd-10x-0.2.32.tgz
     version: 0.2.32
-generated: "2025-06-19T15:16:03.870931087Z"
+generated: "2025-08-02T16:37:41.778665239Z"
