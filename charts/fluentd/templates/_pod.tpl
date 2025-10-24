@@ -71,8 +71,8 @@ containers:
     - name: FLUENTD_CONF
       value: "../../../etc/fluent/fluent.conf"
     {{- if .Values.tenx.enabled }}
-    - name: TENX_LICENSE
-      value: "{{ .Values.tenx.license }}"
+    - name: TENX_API_KEY
+      value: "{{ .Values.tenx.apiKey }}"
     {{- if .Values.tenx.runtimeName }}
     - name: TENX_RUNTIME_NAME
       value: "{{ .Values.tenx.runtimeName }}"

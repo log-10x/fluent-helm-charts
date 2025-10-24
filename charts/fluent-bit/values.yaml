@@ -30,8 +30,8 @@ tenx:
   # jit, native
   variant: jit
 
-  # Specify your 10x license key
-  license: "NO-LICENSE"
+  # Specify your 10x api key
+  apiKey: "NO-API-KEY"
 
   # 10x mode - "report", "regulate" or "optimize"
   kind: "regulate"
