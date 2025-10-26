@@ -81,8 +81,8 @@ containers:
     imagePullPolicy: {{ .Values.image.pullPolicy }}
     env:
     {{- if .Values.tenx.enabled }}
-      - name: TENX_LICENSE
-        value: "{{ .Values.tenx.license }}"
+      - name: TENX_API_KEY
+        value: "{{ .Values.tenx.apiKey }}"
       - name: FLUENT_BIT_CONF_FILE
     {{- if eq $.Values.tenx.kind "optimize" }}
         value: "/fluent-bit/etc/conf/tenx-main-optimize.conf"
