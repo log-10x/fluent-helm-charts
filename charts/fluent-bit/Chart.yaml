@@ -7,8 +7,8 @@ keywords:
   - logging
   - fluent-bit
   - fluentd
-version: 0.2.42
-appVersion: 0.29.6
+version: 0.2.43
+appVersion: 0.29.7
 icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/fluentd/fluentbit/icon/fluentbit-icon-color.svg
 home: https://fluentbit.io/
 sources:
