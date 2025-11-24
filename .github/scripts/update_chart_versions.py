@@ -45,8 +45,8 @@ def update_chart(chart_path: Path, new_engine_version: str) -> None:
     if not APP_VERSION_RE.search(content):
         raise ValueError("Unable to find appVersion line")
 
-    content = APP_VERSION_RE.sub(rf"\1{new_engine_version}", content, count=1)
-    content = SEMVER_RE.sub(rf"version: {bumped_version}", content, count=1)
+    content = APP_VERSION_RE.sub(r"\g<1>" + new_engine_version, content, count=1)
+    content = SEMVER_RE.sub(f"version: {bumped_version}", content, count=1)
 
     chart_path.write_text(content, encoding="utf-8")
 
