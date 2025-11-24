@@ -59,33 +59,14 @@ jobs:
           git pull --ff-only origin main
           git checkout -b "$BRANCH_NAME"
 
-      - name: Install yq
-        run: |
-          YQ_VERSION="v4.44.3"
-          curl -L "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64.tar.gz" | \
-            tar xz && sudo mv yq_linux_amd64 /usr/local/bin/yq
-          yq --version
-
       - name: Update chart versions
         run: |
           update_chart() {
             local chart_file="$1"
-            local current_chart_version
-            current_chart_version=$(yq '.version' "$chart_file")
-
-            IFS='.' read -r major minor patch <<< "$current_chart_version"
-            if [[ -z "$major" || -z "$minor" || -z "$patch" ]]; then
-              echo "Unexpected version format in $chart_file: $current_chart_version"
-              exit 1
-            fi
-
-            local new_patch=$((patch + 1))
-            local new_chart_version="${major}.${minor}.${new_patch}"
-
-            yq -i "
-              .appVersion = env.NEW_VERSION |
-              .version = \"${new_chart_version}\"
-            " "$chart_file"
+            python3 .github/scripts/update_chart_versions.py \
+              --engine-version "$NEW_VERSION" \
+              "$chart_file"
+          }
           }
 
           while IFS= read -r chart_file; do
