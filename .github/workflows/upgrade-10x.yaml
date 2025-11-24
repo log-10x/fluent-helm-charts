@@ -63,7 +63,7 @@ jobs:
         run: |
           update_chart() {
             local chart_file="$1"
-            python3 "${GITHUB_WORKSPACE}/fluent-helm-charts/.github/scripts/update_chart_versions.py" \
+            python3 "${GITHUB_WORKSPACE}/.github/scripts/update_chart_versions.py" \
               --engine-version "$NEW_VERSION" \
               "$chart_file"
           }
