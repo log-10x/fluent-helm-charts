@@ -127,6 +127,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.UPGRADE_ACTION_TOKEN }}
         run: |
+          echo "Waiting for checks to start..."
+          sleep 10
           gh pr checks "${{ steps.create_pr.outputs.pr_url }}" --watch --fail-fast
 
       - name: Merge PR and delete branch
