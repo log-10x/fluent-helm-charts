@@ -67,7 +67,6 @@ jobs:
               --engine-version "$NEW_VERSION" \
               "$chart_file"
           }
-          }
 
           while IFS= read -r chart_file; do
             [[ -z "$chart_file" ]] && continue
