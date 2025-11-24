@@ -41,17 +41,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Stash helper script (temporary - remove after merge to main)
-        run: |
-          mkdir -p /tmp/upgrade-scripts
-          if [ -f .github/scripts/update_chart_versions.py ]; then
-            cp .github/scripts/update_chart_versions.py /tmp/upgrade-scripts/
-            echo "Script stashed to /tmp/upgrade-scripts/"
-          else
-            echo "Warning: Script not found in current branch"
-            exit 1
-          fi
-
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -69,12 +58,6 @@ jobs:
           git checkout main
           git pull --ff-only origin main
           git checkout -b "$BRANCH_NAME"
-
-      - name: Restore helper script (temporary - remove after merge to main)
-        run: |
-          mkdir -p .github/scripts
-          cp /tmp/upgrade-scripts/update_chart_versions.py .github/scripts/
-          echo "Script restored from /tmp/upgrade-scripts/"
 
       - name: Update chart versions
         run: |
