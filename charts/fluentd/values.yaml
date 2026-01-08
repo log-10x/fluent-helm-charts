@@ -278,6 +278,14 @@ tenx:
 
     # REMINDER NOTE - also look at 'originalFluentOutput' for complete configuration
 
+# GitHub config fetcher init container image
+# Used to clone config/symbols repositories when github integration is enabled
+# Most users will not need to modify these values
+#
+githubConfigFetcherImage:
+  repository: ghcr.io/log-10x/github-config-fetcher
+  tag: "0.5.1"
+  pullPolicy: Always
 
 ## Optional array of imagePullSecrets containing private registry credentials
 ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
