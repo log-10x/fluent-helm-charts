@@ -28,7 +28,8 @@ hostAliases:
 {{- if and .Values.tenx.enabled $tenxGHInit }}
 initContainers:
   - name: tenx-git-config
-    image: ghcr.io/log-10x/github-config-fetcher:0.3.0
+    image: "{{ $.Values.githubConfigFetcherImage.repository }}:{{ $.Values.githubConfigFetcherImage.tag }}"
+    imagePullPolicy: {{ $.Values.githubConfigFetcherImage.pullPolicy }}
     args:
       {{- if .Values.tenx.github.config.enabled }}
       - "--config-repo"
