@@ -7,7 +7,7 @@ on:
       - main
       - release-*
     paths:
-      - charts/**/Chart.yaml
+      - charts/fluentd/Chart.yaml
 
 permissions: read-all
 
