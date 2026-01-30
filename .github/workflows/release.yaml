@@ -182,12 +182,18 @@ jobs:
         run: |
           set -euo pipefail
 
+          chart_name="${{ needs.check-fluentd.outputs.name }}"
+          chart_version="${{ needs.check-fluentd.outputs.version }}"
+          release_url="https://github.com/${{ github.repository }}/releases/download/${chart_name}-${chart_version}"
+
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
 
-          mkdir -p /tmp/charts
-          cp .cr-release-packages/*.tgz /tmp/charts/
+          # Keep the packaged chart for index generation
+          mkdir -p /tmp/index-gen
+          cp .cr-release-packages/*.tgz /tmp/index-gen/
 
+          # Checkout gh-pages
           if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
             git fetch origin gh-pages
             git checkout gh-pages
@@ -197,16 +203,21 @@ jobs:
             echo "# Helm Charts" > README.md
           fi
 
-          cp /tmp/charts/*.tgz .
+          # Copy chart to generate index entry, then remove it
+          cp /tmp/index-gen/*.tgz .
 
+          # Generate/merge index with URLs pointing to GitHub releases
           if [[ -f index.yaml ]]; then
-            helm repo index . --merge index.yaml --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+            helm repo index . --merge index.yaml --url "${release_url}"
           else
-            helm repo index . --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+            helm repo index . --url "${release_url}"
           fi
 
-          git add .
-          git commit -m "Release ${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}"
+          # Remove the .tgz - we only want index.yaml on gh-pages
+          rm -f *.tgz
+
+          git add index.yaml
+          git commit -m "Release ${chart_name}-${chart_version}" || echo "No changes to commit"
           git push origin gh-pages
 
   # Release fluent-bit
@@ -280,12 +291,18 @@ jobs:
         run: |
           set -euo pipefail
 
+          chart_name="${{ needs.check-fluent-bit.outputs.name }}"
+          chart_version="${{ needs.check-fluent-bit.outputs.version }}"
+          release_url="https://github.com/${{ github.repository }}/releases/download/${chart_name}-${chart_version}"
+
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
 
-          mkdir -p /tmp/charts
-          cp .cr-release-packages/*.tgz /tmp/charts/
+          # Keep the packaged chart for index generation
+          mkdir -p /tmp/index-gen
+          cp .cr-release-packages/*.tgz /tmp/index-gen/
 
+          # Checkout gh-pages
           if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
             git fetch origin gh-pages
             git checkout gh-pages
@@ -295,14 +312,19 @@ jobs:
             echo "# Helm Charts" > README.md
           fi
 
-          cp /tmp/charts/*.tgz .
+          # Copy chart to generate index entry, then remove it
+          cp /tmp/index-gen/*.tgz .
 
+          # Generate/merge index with URLs pointing to GitHub releases
           if [[ -f index.yaml ]]; then
-            helm repo index . --merge index.yaml --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+            helm repo index . --merge index.yaml --url "${release_url}"
           else
-            helm repo index . --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+            helm repo index . --url "${release_url}"
           fi
 
-          git add .
-          git commit -m "Release ${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}"
+          # Remove the .tgz - we only want index.yaml on gh-pages
+          rm -f *.tgz
+
+          git add index.yaml
+          git commit -m "Release ${chart_name}-${chart_version}" || echo "No changes to commit"
           git push origin gh-pages
