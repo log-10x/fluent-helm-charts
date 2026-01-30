@@ -2,22 +2,43 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      chart:
+        description: 'Chart to release (fluentd or fluent-bit)'
+        required: false
+        type: choice
+        options:
+          - all
+          - fluentd
+          - fluent-bit
+        default: all
   push:
     branches:
       - main
       - release-*
     paths:
       - charts/fluentd/Chart.yaml
+      - charts/fluent-bit/Chart.yaml
 
 permissions: read-all
 
+# Prevent concurrent gh-pages updates
+concurrency:
+  group: release-gh-pages
+  cancel-in-progress: false
+
 jobs:
-  check:
-    name: Check if fluentd needs release
+  # Check which charts need release
+  check-fluentd:
+    name: Check fluentd
     runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' && (github.event.inputs.chart == 'all' || github.event.inputs.chart == 'fluentd') ||
+      github.event_name == 'push'
     outputs:
       release: ${{ steps.check.outputs.release }}
       version: ${{ steps.check.outputs.version }}
+      name: ${{ steps.check.outputs.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,9 +50,16 @@ jobs:
         id: check
         run: |
           set -euo pipefail
-          chart="fluentd"
-          current_version=$(grep "^version:" charts/${chart}/Chart.yaml | awk '{print $2}')
-          chart_name=$(grep "^name:" charts/${chart}/Chart.yaml | awk '{print $2}')
+          chart_dir="charts/fluentd"
+
+          if [[ ! -f "${chart_dir}/Chart.yaml" ]]; then
+            echo "Chart.yaml not found, skipping"
+            echo "release=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          current_version=$(grep "^version:" ${chart_dir}/Chart.yaml | awk '{print $2}')
+          chart_name=$(grep "^name:" ${chart_dir}/Chart.yaml | awk '{print $2}')
 
           # Check if tag already exists
           if git tag -l "${chart_name}-${current_version}" | grep -q .; then
@@ -41,12 +69,57 @@ jobs:
             echo "Will release ${chart_name}-${current_version}"
             echo "release=true" >> $GITHUB_OUTPUT
             echo "version=${current_version}" >> $GITHUB_OUTPUT
+            echo "name=${chart_name}" >> $GITHUB_OUTPUT
           fi
 
-  release:
-    name: Release fluentd chart
-    needs: check
-    if: needs.check.outputs.release == 'true'
+  check-fluent-bit:
+    name: Check fluent-bit
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' && (github.event.inputs.chart == 'all' || github.event.inputs.chart == 'fluent-bit') ||
+      github.event_name == 'push'
+    outputs:
+      release: ${{ steps.check.outputs.release }}
+      version: ${{ steps.check.outputs.version }}
+      name: ${{ steps.check.outputs.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Check fluent-bit version
+        id: check
+        run: |
+          set -euo pipefail
+          chart_dir="charts/fluent-bit"
+
+          if [[ ! -f "${chart_dir}/Chart.yaml" ]]; then
+            echo "Chart.yaml not found, skipping"
+            echo "release=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          current_version=$(grep "^version:" ${chart_dir}/Chart.yaml | awk '{print $2}')
+          chart_name=$(grep "^name:" ${chart_dir}/Chart.yaml | awk '{print $2}')
+
+          # Check if tag already exists
+          if git tag -l "${chart_name}-${current_version}" | grep -q .; then
+            echo "Tag ${chart_name}-${current_version} already exists, skipping release"
+            echo "release=false" >> $GITHUB_OUTPUT
+          else
+            echo "Will release ${chart_name}-${current_version}"
+            echo "release=true" >> $GITHUB_OUTPUT
+            echo "version=${current_version}" >> $GITHUB_OUTPUT
+            echo "name=${chart_name}" >> $GITHUB_OUTPUT
+          fi
+
+  # Release fluentd
+  release-fluentd:
+    name: Release fluentd
+    needs: check-fluentd
+    if: needs.check-fluentd.outputs.release == 'true'
     runs-on: ubuntu-latest
     permissions:
       attestations: write
@@ -62,14 +135,6 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v4
 
-      - name: Get chart info
-        id: chart
-        run: |
-          chart_name=$(grep "^name:" charts/fluentd/Chart.yaml | awk '{print $2}')
-          chart_version=$(grep "^version:" charts/fluentd/Chart.yaml | awk '{print $2}')
-          echo "name=${chart_name}" >> $GITHUB_OUTPUT
-          echo "version=${chart_version}" >> $GITHUB_OUTPUT
-
       - name: Package chart
         run: |
           helm package charts/fluentd --destination .cr-release-packages
@@ -83,51 +148,46 @@ jobs:
 
       - name: Push to OCI registry
         run: |
-          helm push .cr-release-packages/${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}.tgz oci://ghcr.io/${{ github.repository }}
+          helm push .cr-release-packages/${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}.tgz oci://ghcr.io/${{ github.repository }}
 
       - name: Extract release notes from CHANGELOG
         id: changelog
         run: |
-          # Extract release notes for current version from CHANGELOG.md
-          version="${{ steps.chart.outputs.version }}"
+          version="${{ needs.check-fluentd.outputs.version }}"
           changelog_file="charts/fluentd/CHANGELOG.md"
 
           if [[ -f "${changelog_file}" ]]; then
-            # Extract content between version header and next header
             notes=$(awk "/## \\[v${version}\\]/{flag=1; next} /## \\[/{flag=0} flag" "${changelog_file}" | head -50)
             if [[ -n "${notes}" ]]; then
               echo "notes<<EOF" >> $GITHUB_OUTPUT
               echo "${notes}" >> $GITHUB_OUTPUT
               echo "EOF" >> $GITHUB_OUTPUT
             else
-              echo "notes=Release ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}" >> $GITHUB_OUTPUT
+              echo "notes=Release ${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}" >> $GITHUB_OUTPUT
             fi
           else
-            echo "notes=Release ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "notes=Release ${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}
-          name: ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}
+          tag_name: ${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}
+          name: ${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}
           body: ${{ steps.changelog.outputs.notes }}
-          files: .cr-release-packages/${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}.tgz
+          files: .cr-release-packages/${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}.tgz
           make_latest: true
 
       - name: Publish to GitHub Pages
         run: |
           set -euo pipefail
 
-          # Configure git
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
 
-          # Save the packaged chart
           mkdir -p /tmp/charts
           cp .cr-release-packages/*.tgz /tmp/charts/
 
-          # Checkout gh-pages branch (create if doesn't exist)
           if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
             git fetch origin gh-pages
             git checkout gh-pages
@@ -137,17 +197,112 @@ jobs:
             echo "# Helm Charts" > README.md
           fi
 
-          # Copy chart package
           cp /tmp/charts/*.tgz .
 
-          # Update Helm repo index
           if [[ -f index.yaml ]]; then
             helm repo index . --merge index.yaml --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
           else
             helm repo index . --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
           fi
 
-          # Commit and push
           git add .
-          git commit -m "Release ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}"
+          git commit -m "Release ${{ needs.check-fluentd.outputs.name }}-${{ needs.check-fluentd.outputs.version }}"
+          git push origin gh-pages
+
+  # Release fluent-bit
+  release-fluent-bit:
+    name: Release fluent-bit
+    needs: [check-fluent-bit, release-fluentd]
+    # Run if fluent-bit needs release, and either fluentd completed or was skipped
+    if: |
+      always() &&
+      needs.check-fluent-bit.outputs.release == 'true' &&
+      (needs.release-fluentd.result == 'success' || needs.release-fluentd.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Package chart
+        run: |
+          helm package charts/fluent-bit --destination .cr-release-packages
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to OCI registry
+        run: |
+          helm push .cr-release-packages/${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}.tgz oci://ghcr.io/${{ github.repository }}
+
+      - name: Extract release notes from CHANGELOG
+        id: changelog
+        run: |
+          version="${{ needs.check-fluent-bit.outputs.version }}"
+          changelog_file="charts/fluent-bit/CHANGELOG.md"
+
+          if [[ -f "${changelog_file}" ]]; then
+            notes=$(awk "/## \\[v${version}\\]/{flag=1; next} /## \\[/{flag=0} flag" "${changelog_file}" | head -50)
+            if [[ -n "${notes}" ]]; then
+              echo "notes<<EOF" >> $GITHUB_OUTPUT
+              echo "${notes}" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+            else
+              echo "notes=Release ${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "notes=Release ${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}
+          name: ${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}
+          body: ${{ steps.changelog.outputs.notes }}
+          files: .cr-release-packages/${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}.tgz
+          make_latest: true
+
+      - name: Publish to GitHub Pages
+        run: |
+          set -euo pipefail
+
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+          mkdir -p /tmp/charts
+          cp .cr-release-packages/*.tgz /tmp/charts/
+
+          if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
+            git fetch origin gh-pages
+            git checkout gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rf .
+            echo "# Helm Charts" > README.md
+          fi
+
+          cp /tmp/charts/*.tgz .
+
+          if [[ -f index.yaml ]]; then
+            helm repo index . --merge index.yaml --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          else
+            helm repo index . --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          fi
+
+          git add .
+          git commit -m "Release ${{ needs.check-fluent-bit.outputs.name }}-${{ needs.check-fluent-bit.outputs.version }}"
           git push origin gh-pages
