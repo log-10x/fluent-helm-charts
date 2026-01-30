@@ -114,3 +114,40 @@ jobs:
           body: ${{ steps.changelog.outputs.notes }}
           files: .cr-release-packages/${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}.tgz
           make_latest: true
+
+      - name: Publish to GitHub Pages
+        run: |
+          set -euo pipefail
+
+          # Configure git
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+          # Save the packaged chart
+          mkdir -p /tmp/charts
+          cp .cr-release-packages/*.tgz /tmp/charts/
+
+          # Checkout gh-pages branch (create if doesn't exist)
+          if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
+            git fetch origin gh-pages
+            git checkout gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rf .
+            echo "# Helm Charts" > README.md
+          fi
+
+          # Copy chart package
+          cp /tmp/charts/*.tgz .
+
+          # Update Helm repo index
+          if [[ -f index.yaml ]]; then
+            helm repo index . --merge index.yaml --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          else
+            helm repo index . --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          fi
+
+          # Commit and push
+          git add .
+          git commit -m "Release ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}"
+          git push origin gh-pages
