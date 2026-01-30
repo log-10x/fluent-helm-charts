@@ -27,35 +27,7 @@ entries:
     - https://github.com/log-10x/docker-images
     - https://github.com/fluent/fluent-bit/
     urls:
-    - https://log-10x.github.io/fluent-helm-charts/fluent-bit-10x-0.2.0.tgz
-    version: 0.2.0
-  - annotations:
-      artifacthub.io/changes: |
-        - kind: changed
-          description: "Added 10x Observability engine integration to fluent-bit"
-    apiVersion: v1
-    appVersion: 0.2.0
-    created: "2026-01-30T21:26:30.900393208Z"
-    description: A Helm chart for Kubernetes for Fluent Bit log processor + 10x Observability
-      engine
-    digest: 904d7c23b4bd93fafb471ac73b8598700815cbe432610a76cfb246517ca66d45
-    home: https://github.com/log-10x/fluent-helm-charts
-    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
-    keywords:
-    - 10x
-    - log10x
-    - logging
-    - fluent-bit
-    maintainers:
-    - email: engineering@log10x.com
-      name: Log10x
-    name: fluent-bit-10x
-    sources:
-    - https://github.com/log-10x/fluent-helm-charts
-    - https://github.com/log-10x/docker-images
-    - https://github.com/fluent/fluent-bit/
-    urls:
-    - https://log-10x.github.io/fluent-helm-charts/.cr-release-packages/fluent-bit-10x-0.2.0.tgz
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-bit-10x-0.2.0/fluent-bit-10x-0.2.0.tgz
     version: 0.2.0
   fluentd-10x:
   - annotations:
@@ -85,35 +57,6 @@ entries:
     - https://github.com/fluent/fluentd/
     - https://github.com/fluent/fluentd-kubernetes-daemonset
     urls:
-    - https://log-10x.github.io/fluent-helm-charts/fluentd-10x-0.2.0.tgz
-    version: 0.2.0
-  - annotations:
-      artifacthub.io/changes: |
-        - kind: changed
-          description: "Added 10x Observability engine integration to fluentd"
-    apiVersion: v2
-    appVersion: 0.2.0
-    created: "2026-01-30T21:26:30.901846675Z"
-    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
-      engine
-    digest: 60479c4f8b1d2fc1370257a63efd356cb7c275d73430102a37bf55ab07316808
-    home: https://github.com/log-10x/fluent-helm-charts
-    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
-    keywords:
-    - 10x
-    - log10x
-    - logging
-    - fluentd
-    maintainers:
-    - email: engineering@log10x.com
-      name: Log10x
-    name: fluentd-10x
-    sources:
-    - https://github.com/log-10x/fluent-helm-charts
-    - https://github.com/log-10x/docker-images
-    - https://github.com/fluent/fluentd/
-    - https://github.com/fluent/fluentd-kubernetes-daemonset
-    urls:
-    - https://log-10x.github.io/fluent-helm-charts/.cr-release-packages/fluentd-10x-0.2.0.tgz
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-10x-0.2.0/fluentd-10x-0.2.0.tgz
     version: 0.2.0
 generated: "2026-01-30T21:26:30.895081494Z"
