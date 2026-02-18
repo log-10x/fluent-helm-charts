@@ -1,0 +1,35 @@
+apiVersion: v1
+entries:
+  fluent-bit:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: "Upgraded 10x engine to appVersion 0.3.0."
+        - kind: changed
+          description: "Added fluent keyword to chart metadata."
+    apiVersion: v1
+    appVersion: 0.9.0
+    created: "2026-02-18T16:57:32.33814501Z"
+    description: A Helm chart for Kubernetes for Fluent Bit log processor + 10x Observability
+      engine
+    digest: 97e141adedbae51c22a9ded30511c314099de75f2be0ddacc82c4cd336281459
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluent-bit
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluent-bit
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluent-bit/
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-bit-0.9.0/fluent-bit-0.9.0.tgz
+    version: 0.9.0
+generated: "2026-02-18T16:57:32.338156712Z"
