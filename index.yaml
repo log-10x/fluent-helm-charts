@@ -126,4 +126,37 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-operator-3.5.0/fluent-operator-3.5.0.tgz
     version: 3.5.0
-generated: "2026-02-18T17:00:03.842258073Z"
+  fluentd:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: "Upgraded 10x engine to appVersion 0.3.0."
+        - kind: changed
+          description: "Added fluent keyword to chart metadata."
+    apiVersion: v2
+    appVersion: 0.9.0
+    created: "2026-02-18T17:01:23.109876228Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 57ce654b4360bf4ac7a33126dbf323a20b33c9d8981a0857473166bf0d4f66fd
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluentd
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluentd
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
+    version: 0.9.0
+generated: "2026-02-18T17:01:23.109888591Z"
