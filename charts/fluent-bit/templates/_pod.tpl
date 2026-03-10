@@ -86,10 +86,14 @@ containers:
     env:
     {{- if .Values.tenx.enabled }}
       - name: TENX_API_KEY
+    {{- if and .Values.tenx.apiKey (ne .Values.tenx.apiKey "NO-API-KEY") }}
         valueFrom:
           secretKeyRef:
             name: {{ include "fluent-bit.fullname" . }}-tenx-api-key
             key: api-key
+    {{- else }}
+        value: {{ .Values.tenx.apiKey | quote }}
+    {{- end }}
       - name: FLUENT_BIT_CONF_FILE
     {{- if eq $.Values.tenx.kind "optimize" }}
         value: "/fluent-bit/etc/conf/tenx-main-optimize.conf"

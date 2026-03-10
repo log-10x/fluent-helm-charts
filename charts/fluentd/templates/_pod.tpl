@@ -78,10 +78,14 @@ containers:
       value: "../../../etc/fluent/fluent.conf"
     {{- if .Values.tenx.enabled }}
     - name: TENX_API_KEY
+    {{- if and .Values.tenx.apiKey (ne .Values.tenx.apiKey "NO-API-KEY") }}
       valueFrom:
         secretKeyRef:
           name: {{ include "fluentd.fullname" . }}-tenx-api-key
           key: api-key
+    {{- else }}
+      value: {{ .Values.tenx.apiKey | quote }}
+    {{- end }}
     {{- if .Values.tenx.runtimeName }}
     - name: TENX_RUNTIME_NAME
       value: {{ .Values.tenx.runtimeName | quote }}

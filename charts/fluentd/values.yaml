@@ -51,7 +51,7 @@ tenx:
   configFetcherImage:
     repository: log10x/git-config-fetcher
     tag: "0.9.7"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
   # Control fetching 10x config and/or symbols from a git repository or a volume mount.
   # If either config or symbols git is enabled, the deployment will setup an init container
