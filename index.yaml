@@ -192,6 +192,36 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: "Upgraded 10x engine to appVersion 1.0."
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-03-22T13:40:39.131290442Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 7ecfd4676a215f8748e10b1aa8f20a803462dc5465781f61585a936a85767277
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluentd
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluentd
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-1.0.0/fluentd-1.0.0.tgz
+    version: 1.0.0
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: "Added custom configuration option via volume mount."
         - kind: changed
           description: "Switched github config fetcher to git agnostic one."
@@ -285,4 +315,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
     version: 0.9.0
-generated: "2026-03-10T10:35:23.48381345Z"
+generated: "2026-03-22T13:40:39.131312247Z"
