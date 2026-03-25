@@ -252,6 +252,36 @@ entries:
         - kind: changed
           description: "Upgraded 10x engine to appVersion 1.0."
     apiVersion: v2
+    appVersion: 1.0.6
+    created: "2026-03-25T13:53:44.810740863Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 0b41d02a4e22457bae0777e91ef0951356d84f585ee500f8bcd14813609ab4d7
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluentd
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluentd
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-1.0.6/fluentd-1.0.6.tgz
+    version: 1.0.6
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: "Upgraded 10x engine to appVersion 1.0."
+    apiVersion: v2
     appVersion: 1.0.5
     created: "2026-03-22T14:46:30.887992846Z"
     description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
@@ -403,4 +433,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
     version: 0.9.0
-generated: "2026-03-25T13:52:53.136112328Z"
+generated: "2026-03-25T13:53:44.810779215Z"
