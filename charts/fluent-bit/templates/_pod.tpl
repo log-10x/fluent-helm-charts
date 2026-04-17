@@ -95,13 +95,7 @@ containers:
         value: {{ .Values.tenx.apiKey | quote }}
     {{- end }}
       - name: FLUENT_BIT_CONF_FILE
-    {{- if eq $.Values.tenx.kind "optimize" }}
-        value: "/fluent-bit/etc/conf/tenx-main-optimize.conf"
-    {{- else if eq $.Values.tenx.kind "regulate" }}
         value: "/fluent-bit/etc/conf/tenx-main-regulate.conf"
-    {{- else if eq $.Values.tenx.kind "report" }}
-        value: "/fluent-bit/etc/conf/tenx-main-report.conf"
-    {{- end }}
     {{- if .Values.tenx.runtimeName }}
       - name: TENX_RUNTIME_NAME
         value: {{ .Values.tenx.runtimeName | quote }}
