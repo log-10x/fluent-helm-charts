@@ -7,8 +7,8 @@ keywords:
   - logging
   - fluent
   - fluent-bit
-version: 1.0.6
-appVersion: 1.0.6
+version: 1.0.7
+appVersion: 1.0.7
 icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
 home: https://github.com/log-10x/fluent-helm-charts
 sources:
@@ -21,4 +21,10 @@ maintainers:
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: "Upgraded 10x engine to version 1.0.6"
+      description: "Upgraded 10x engine to version 1.0.7"
+    - kind: removed
+      description: "Removed tenx.kind option (report/regulate/optimize) — chart is now hardcoded to regulator mode"
+    - kind: added
+      description: "Added tenx.optimize flag (default false) to enable optimization mode (lossless event compaction)"
+    - kind: removed
+      description: "Removed reporter and optimizer Lua scripts and config entries — use regulator with tenx.optimize=true for optimization"

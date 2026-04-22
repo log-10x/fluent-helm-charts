@@ -33,8 +33,10 @@ tenx:
   # Specify your 10x api key
   apiKey: "NO-API-KEY"
 
-  # 10x mode - "report", "regulate" or "optimize"
-  kind: "regulate"
+  # Enable optimization mode to encode emitted events for volume reduction.
+  # When false (default), the regulator filters events but emits them in their original form.
+  # When true, the regulator also losslessly compacts surviving events (50-65% volume reduction).
+  optimize: false
 
   # Specify name for the 10x runtime
   # If empty, will use default from 10x configuration
@@ -84,41 +86,41 @@ tenx:
     tag: "0.9.7"
     pullPolicy: IfNotPresent
 
-  # Main config files, used internally by the template to setup the correct overall fluent-bit configuration
-  # All the inputs/filters/outputs defined here will appear AFTER the fluent-bit inputs/filters/outputs which
-  # are defined in the original 'config' (later in the file)
-  #
-  mainFiles:
-    report:
-      inputs:
-        - tenx-log-input.conf
-      filters:
-        - tenx-report.conf
-      outputs:
-        - tenx-log-output.conf
-
-    regulate:
-      inputs:
-        - tenx-readback.conf
-        - tenx-log-input.conf
-      filters:
-        - tenx-regulate.conf
-      outputs:
-        - tenx-log-output.conf
-
-    optimize:
-      inputs:
-        - tenx-readback.conf
-        - tenx-log-input.conf
-      filters:
-        - tenx-optimize.conf
-      outputs:
-        - tenx-log-output.conf
-        - tenx-templates-output.conf
-
-  # Individual config files, responsible for setting the individual aspects of the fluent-bit configuration
+  # Config files used internally by the template to set up the fluent-bit configuration.
+  # These appear AFTER the fluent-bit inputs/filters/outputs defined in the 'config' section below.
   #
   configFiles:
+    # Setting up a unix socket input for reading back regulated/optimized events from 10x
+    #
+    # Using absolute include path and not utilizing ${TENX_MODULES} because currently fluent-bit
+    # can't resolve environment vars as part of @INCLUDE
+    #
+    # See https://github.com/fluent/fluent-bit/issues/2020
+    #
+    tenx-readback.conf: |
+      @INCLUDE /opt/tenx-edge/lib/app/modules/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-unix.conf
+
+    # Setting up the 10x regulator pipeline as a Lua filter.
+    #
+    # https://github.com/log-10x/modules/blob/main/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-regulate.conf
+    #
+    tenx-regulate.conf: |
+      [FILTER]
+          Name Lua
+          Match *
+          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-regulate.lua
+          call tenx_process
+
+    # Setting up the 10x optimizer pipeline as a Lua filter (regulator with optimization enabled).
+    # Used when tenx.optimize is true.
+    #
+    tenx-optimize.conf: |
+      [FILTER]
+          Name Lua
+          Match *
+          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-optimize.lua
+          call tenx_process
+
     # Setting and input for reading the internal 10x log, which fluent-bit can forward to the selected output (see below)
     #
     tenx-log-input.conf: |
@@ -138,59 +140,10 @@ tenx:
           Logstash_Prefix tenx-internal
           Retry_Limit False
 
-    # Setting up an 10x 'report' pipeline as a Lua filter.
+    # Emitting generated TenXTemplates (optimize mode only) to the l1es_dml index in Elasticsearch.
+    # This allows the 10x Elastic plugin to decode optimized events.
     #
-    # This is identical in concept to
-    # https://github.com/log-10x/modules/blob/main/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-report.conf
-    #
-    tenx-report.conf: |
-      [FILTER]
-          Name Lua
-          Match *
-          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-report.lua
-          call tenx_process
-
-    # Setting up an 10x 'regulate' pipeline as a Lua filter.
-    #
-    # This is identical in concept to
-    # https://github.com/log-10x/modules/blob/main/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-regulate.conf
-    #
-    tenx-regulate.conf: |
-      [FILTER]
-          Name Lua
-          Match *
-          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-regulate.lua
-          call tenx_process
-
-    # Setting up an 10x 'optimize' pipeline as a Lua filter.
-    #
-    # This is identical in concept to
-    # https://github.com/log-10x/modules/blob/main/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-optimize.conf
-    #
-    tenx-optimize.conf: |
-      [FILTER]
-          Name Lua
-          Match *
-          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-optimize.lua
-          call tenx_process
-
-    # Setting up a unix socket input for reading back events from 10x
-    #
-    # Using absolute include path and not utilizing ${TENX_MODULES} because currently fluent-bit
-    # can't resolve environment vars as part of @INCLUDE
-    #
-    # See https://github.com/fluent/fluent-bit/issues/2020
-    #
-    tenx-readback.conf: |
-      @INCLUDE /opt/tenx-edge/lib/app/modules/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-unix.conf
-
-    # Emitting generated tenxTemplates ('optimize' only) the l1es_dml index in elastic search.
-    # This will allow the 10x Elastic app to decode optimized events.
-    #
-    # For more info on tenxTemplates, see https://doc.log10x.com/run/template/
-    #
-    # This config is based on
-    # https://github.com/log-10x/config/blob/main/pipelines/run/input/forwarder/fluentbit/tenx-elastic.conf
+    # For more info on TenXTemplates, see https://doc.log10x.com/run/template/
     #
     tenx-templates-output.conf: |
       [OUTPUT]

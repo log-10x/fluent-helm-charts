@@ -1,15 +1,14 @@
-# Sample values.yaml for deploying an 10x edge regulator with fluentd
+# Sample values.yaml for deploying an 10x regulator with fluentd
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the outputConfigs section.
 #
 # For more info on deploying, see -
-# https://doc.log10x.com/apps/edge/regulator/deploy/#fluentd
+# https://doc.log10x.com/apps/regulator/deploy/#fluentd
 #
 tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
 
-  kind: "regulate"
 
   runtimeName: "my-fluentd-regulator"
 

@@ -32,8 +32,10 @@ tenx:
   # Specify your 10x api key
   apiKey: "NO-API-KEY"
 
-  # 10x mode - "report", "regulate" or "optimize"
-  kind: "regulate"
+  # Enable optimization mode to encode emitted events for volume reduction.
+  # When false (default), the regulator filters events but emits them in their original form.
+  # When true, the regulator also losslessly compacts surviving events (50-65% volume reduction).
+  optimize: false
 
   # Specify name for the 10x runtime
   # If empty, will use default from 10x configuration
@@ -113,99 +115,42 @@ tenx:
       enabled: false
       claimName: ""
 
-  # Main config files, used internally by the template to setup the correct overall fluentd configuration
+  # Config files used internally by the template to set up the fluentd configuration.
   #
   fileConfigs:
-    # Config files for the 'reporter' app
+    # Fluentd config for passing events into the 10x pipeline via Unix socket.
+    # When optimize is true, uses the optimize conf which adds regulatorOptimize flag.
     #
-    report:
-      # Fluentd config for handling passing events into the pipeline in 'reporter' mode
-      #
-      00_tenx.conf: |-
-        @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-report.conf"
+    00_tenx_regulate.conf: |-
+      @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-regulate-unix.conf"
 
-      # Controls which events are emitted into the 10x 'reporter'
-      # Works by creating a copy, one to send into 10x via the @TENX label, and one to the actual
-      # output Fluentd will emit the events to.
-      #
-      # Default behavior is to emit all events to 10x, edit this section to change.
-      #
-      04_outputs.conf: |-
-        <label @OUTPUT>
-          <match **>
-            @type copy
-            <store>
-              @type relabel
-              @label @FINAL-OUTPUT
-            </store>
-            <store>
-              @type relabel
-              @label @TENX
-            </store>
-          </match>
-        </label>
+    00_tenx_optimize.conf: |-
+      @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-optimize-unix.conf"
 
-    regulate:
-      # Fluentd config for handling passing events into the pipeline in 'regulator' mode
-      #
-      00_tenx.conf: |-
-        @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-regulate-unix.conf"
+    # Controls which events are emitted into the 10x regulator.
+    # Works by applying the @TENX label.
+    #
+    # Events which aren't meant to be regulated should have the @FINAL-OUTPUT label applied instead.
+    #
+    # Default behavior is to emit all events to 10x for regulating, edit this section to change.
+    #
+    04_outputs.conf: |-
+      <label @OUTPUT>
+        <match **>
+          @type relabel
+          @label @TENX
+        </match>
+      </label>
 
-      # Controls which events are emitted into the 10x 'regulator'
-      # Works by applying the @TENX label.
-      #
-      # Events which aren't meant to be regulated, should have the @FINAL-OUTPUT label applied instead.
-      #
-      # Default behavior is to emit all events to 10x for regulating, edit this section to change.
-      #
-      04_outputs.conf: |-
-        <label @OUTPUT>
-          <match **>
-            @type relabel
-            @label @TENX
-          </match>
-        </label>
-
-      # Routes all events coming back from 10x after being regulated to the final Fluentd output.
-      #
-      05_tenx_processed.conf: |-
-        <label @TENX-PROCESSED>
-          <match **>
-            @type relabel
-            @label @FINAL-OUTPUT
-          </match>
-        </label>
-
-    optimize:
-      # Fluentd config for handling passing events into the pipeline in 'optimizer' mode
-      #
-      00_tenx.conf: |-
-        @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-optimize-unix.conf"
-
-      # Controls which events are emitted into the 10x 'optimizer'
-      # Works by applying the @TENX label.
-      #
-      # Events which aren't meant to be optimized, should have the @FINAL-OUTPUT label applied instead.
-      #
-      # Default behavior is to emit all events to 10x for optimizing, edit this section to change.
-      #
-      04_outputs.conf: |-
-        <label @OUTPUT>
-          <match **>
-            @type relabel
-            @label @TENX
-          </match>
-        </label>
-
-      # Routes all events coming back from 10x after being optimized to the final Fluentd output.
-      #
-      05_tenx_processed.conf: |-
-        <label @TENX-PROCESSED>
-          <match **>
-            @type relabel
-            @label @FINAL-OUTPUT
-          </match>
-        </label>
+    # Routes all events coming back from 10x after being regulated to the final Fluentd output.
+    #
+    05_tenx_processed.conf: |-
+      <label @TENX-PROCESSED>
+        <match **>
+          @type relabel
+          @label @FINAL-OUTPUT
+        </match>
+      </label>
 
     TenXLogs:
       # A Fluentd source for reading the internal 10x log.

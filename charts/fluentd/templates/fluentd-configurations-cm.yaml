@@ -12,12 +12,23 @@ data:
     {{- $value | nindent 4 }}
 {{- end }}
 {{- if .Values.tenx.enabled }}
-{{- range $key, $value := index .Values.tenx.fileConfigs .Values.tenx.kind }}
+{{- range $key, $value := .Values.tenx.fileConfigs }}
+{{- if ne $key "TenXLogs" }}
+{{- if and (not (eq $key "00_tenx_optimize.conf")) (not (eq $key "00_tenx_regulate.conf")) }}
   {{$key }}: |-
     {{- $value | nindent 4 }}
 {{- end }}
+{{- end }}
+{{- end }}
+{{- if $.Values.tenx.optimize }}
+  00_tenx.conf: |-
+    {{- (index .Values.tenx.fileConfigs "00_tenx_optimize.conf") | nindent 4 }}
+{{- else }}
+  00_tenx.conf: |-
+    {{- (index .Values.tenx.fileConfigs "00_tenx_regulate.conf") | nindent 4 }}
+{{- end }}
 {{- range $key, $value := .Values.tenx.outputConfigs }}
-{{- if or (eq $.Values.tenx.kind "optimize") (not (contains "templates" $key)) }}
+{{- if or $.Values.tenx.optimize (not (contains "templates" $key)) }}
   {{$key }}: |-
     {{- $value | nindent 4 }}
 {{- end }}

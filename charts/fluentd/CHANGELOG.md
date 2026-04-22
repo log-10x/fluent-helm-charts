@@ -14,6 +14,21 @@
 
 ## [UNRELEASED]
 
+## [v1.0.7] - 2026-04-22
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.7
+
+### Removed
+
+- Removed `tenx.kind` option (report/regulate/optimize) — chart is now hardcoded to regulator mode
+- Removed reporter and optimizer fluentd conf entries — use regulator with `tenx.optimize=true` for optimization
+
+### Added
+
+- Added `tenx.optimize` flag (default `false`) to enable optimization mode (lossless event compaction)
+
 ## [v1.0.6] - 2026-03-25
 
 ### Changed

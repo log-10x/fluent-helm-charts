@@ -1,15 +1,15 @@
-# Sample values.yaml for deploying an 10x edge regulator with fluent-bit
+# Sample values.yaml for deploying an 10x regulator with fluent-bit
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the config.output, tenx-log-output.conf and tenx-templates-output.conf sections.
 #
 # For more info on deploying, see -
-# https://doc.log10x.com/apps/edge/optimizer/deploy/#fluent-bit
+# https://doc.log10x.com/apps/regulator/deploy/#fluent-bit
 #
 tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
 
-  kind: "optimize"
+  optimize: true
 
   runtimeName: "my-fluent-bit-optimizer"
 
