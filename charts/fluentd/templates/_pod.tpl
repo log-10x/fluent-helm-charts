@@ -104,6 +104,20 @@ containers:
     - name: TENX_SYMBOLS_PATH
       value: "/etc/tenx/symbols"
     {{- end }}
+    {{- /*
+      Optimize mode is toggled via the regulatorOptimize env var rather
+      than a separate conf include. The engine reads this via
+      TenXEnv.get("regulatorOptimize") in
+      pipelines/run/input/forwarder/fluentd/regulate/config.yaml and
+      flips encodeObjects=true, which causes events emitted back through
+      fluentd to come out in the compact templateHash+vars form
+      (~20-40x volume reduction). See fluentd-configurations-cm.yaml for
+      why this replaced the old 00_tenx_optimize.conf path.
+    */}}
+    {{- if .Values.tenx.optimize }}
+    - name: regulatorOptimize
+      value: "true"
+    {{- end }}
     {{- end }}
     {{- if .Values.env }}
     {{- toYaml .Values.env | nindent 4 }}

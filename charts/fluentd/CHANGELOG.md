@@ -14,6 +14,10 @@
 
 ## [UNRELEASED]
 
+### Fixed
+
+- `tenx.optimize: true` no longer routes to `00_tenx_optimize.conf` which `@include`s `tenx-optimize-unix.conf` — a file that isn't shipped in `log10x/fluentd-10x:1.0.7-jit`. The chart now always uses `00_tenx_regulate.conf` and toggles encoding by setting `regulatorOptimize=true` on the pod env. Same behavior, working image.
+
 ## [v1.0.7] - 2026-04-22
 
 ### Changed

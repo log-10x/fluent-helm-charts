@@ -114,6 +114,20 @@ containers:
       - name: TENX_SYMBOLS_PATH
         value: "/etc/tenx/symbols"
     {{- end }}
+    {{- /*
+      Optimize mode is toggled via the regulatorOptimize env var rather
+      than a separate Lua filter. The engine reads this value via
+      TenXEnv.get("regulatorOptimize") in
+      pipelines/run/input/forwarder/fluentbit/regulate/config.yaml and
+      flips encodeObjects=true, which causes events emitted back through
+      fluent-bit to come out in the compact templateHash+vars form
+      (~20-40x volume reduction). See configmap.yaml for why this
+      replaced the old tenx-optimize.conf / tenx-optimize.lua path.
+    */}}
+    {{- if .Values.tenx.optimize }}
+      - name: regulatorOptimize
+        value: "true"
+    {{- end }}
     {{- else }}
       - name: FLUENT_BIT_CONF_FILE
         value: "/fluent-bit/etc/conf/fluent-bit.conf"

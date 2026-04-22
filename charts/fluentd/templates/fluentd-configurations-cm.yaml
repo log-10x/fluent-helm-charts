@@ -20,13 +20,22 @@ data:
 {{- end }}
 {{- end }}
 {{- end }}
-{{- if $.Values.tenx.optimize }}
-  00_tenx.conf: |-
-    {{- (index .Values.tenx.fileConfigs "00_tenx_optimize.conf") | nindent 4 }}
-{{- else }}
+{{- /*
+  NOTE: the optimize path deliberately reuses 00_tenx_regulate.conf.
+  tenx.optimize=true used to route here to 00_tenx_optimize.conf,
+  which @includes tenx-optimize-unix.conf. That conf file is NOT
+  shipped in log10x/fluentd-10x:1.0.7-jit — only tenx-regulate-unix.conf,
+  tenx-regulate-stdio.conf, and tenx-report.conf are present — so the
+  optimize=true path fails fluentd startup with a missing-include error.
+
+  The regulator conf is sufficient — optimize mode is triggered by
+  setting `regulatorOptimize=true` on the pod env (see _pod.tpl /
+  deployment template), which the engine reads via TenXEnv.get(...) in
+  pipelines/run/input/forwarder/fluentd/regulate/config.yaml to flip
+  encodeObjects=true. Same pattern as the fluent-bit chart.
+*/}}
   00_tenx.conf: |-
     {{- (index .Values.tenx.fileConfigs "00_tenx_regulate.conf") | nindent 4 }}
-{{- end }}
 {{- range $key, $value := .Values.tenx.outputConfigs }}
 {{- if or $.Values.tenx.optimize (not (contains "templates" $key)) }}
   {{$key }}: |-

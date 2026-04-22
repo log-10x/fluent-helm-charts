@@ -14,6 +14,10 @@
 
 ## [UNRELEASED]
 
+### Fixed
+
+- `tenx.optimize: true` no longer references `tenx-optimize.lua`, which isn't shipped in `log10x/fluent-bit-10x:1.0.7-jit`. Previously this crashed fluent-bit at init with `cannot access script …tenx-optimize.lua`. The chart now always loads `tenx-regulate.lua` and toggles encoding by setting `regulatorOptimize=true` on the pod env — the engine reads that env and flips `encodeObjects=true` via the yield-macro in the regulate config. Same behavior, working image.
+
 ## [v1.0.7] - 2026-04-22
 
 ### Changed

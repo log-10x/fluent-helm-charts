@@ -16,11 +16,22 @@ data:
     {{- (tpl (index .Values.tenx.configFiles "tenx-readback.conf") $) | nindent 4 }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-log-input.conf") $) | nindent 4 }}
     {{- (tpl .Values.config.filters $)  | nindent 4 }}
-  {{- if .Values.tenx.optimize }}
-    {{- (tpl (index .Values.tenx.configFiles "tenx-optimize.conf") $) | nindent 4 }}
-  {{- else }}
+  {{- /*
+    NOTE: the optimize path deliberately reuses tenx-regulate.conf.
+    tenx.optimize=true used to route here to tenx-optimize.conf, which
+    references a tenx-optimize.lua script. That Lua file is NOT shipped
+    in log10x/fluent-bit-10x:1.0.7-jit (only tenx-regulate.lua,
+    tenx-report.lua, and tenx.lua are present), so the optimize=true
+    path fails fluent-bit startup with:
+      cannot access script '/opt/tenx-edge/lib/app/modules/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-optimize.lua'
+
+    The regulator Lua script is sufficient — optimize mode is triggered
+    by setting `regulatorOptimize=true` on the pod env (see _pod.tpl),
+    which the engine reads via TenXEnv.get("regulatorOptimize") in
+    pipelines/run/input/forwarder/fluentbit/regulate/config.yaml to
+    flip encodeObjects=true.
+  */}}
     {{- (tpl (index .Values.tenx.configFiles "tenx-regulate.conf") $) | nindent 4 }}
-  {{- end }}
     {{- (tpl .Values.config.outputs $)  | nindent 4 }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-log-output.conf") $) | nindent 4 }}
   {{- if .Values.tenx.optimize }}
