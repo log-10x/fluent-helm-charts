@@ -21,6 +21,10 @@ maintainers:
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: "Unified regulator and optimizer into a single app with optimize flag"
-    - kind: changed
       description: "Upgraded 10x engine to version 1.0.7"
+    - kind: removed
+      description: "Removed tenx.kind option (report/regulate/optimize) — chart is now hardcoded to regulator mode"
+    - kind: added
+      description: "Added tenx.optimize flag (default false) to enable optimization mode (lossless event compaction)"
+    - kind: removed
+      description: "Removed reporter and optimizer Lua scripts and config entries — use regulator with tenx.optimize=true for optimization"
