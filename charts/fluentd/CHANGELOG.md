@@ -14,6 +14,12 @@
 
 ## [UNRELEASED]
 
+## [v1.0.8] - 2026-04-25
+
+### Changed
+
+- Renamed regulator to reducer (cosmetic) — `regulatorOptimize` env → `reducerOptimize`. Pipeline action verb `regulate` and config filenames preserved. Companion to log-10x/modules#21 and log-10x/config#20.
+
 ## [v1.0.7] - 2026-04-22
 
 ### Changed
