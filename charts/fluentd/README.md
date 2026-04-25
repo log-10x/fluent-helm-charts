@@ -6,7 +6,7 @@
 
 ## Overview
 
-This chart is intended to set up a Fluentd daemonset with the 10x [Regulator](https://doc.log10x.com/apps/regulator/) app
+This chart is intended to set up a Fluentd daemonset with the 10x [Reducer](https://doc.log10x.com/apps/reducer/) app
 
 The chart is derived from the base [Fluentd chart](https://github.com/fluent/helm-charts/tree/main/charts/fluentd), with some key differences which enable Fluentd to work with 10x:
 
@@ -34,7 +34,7 @@ helm install fluentd log10x-fluent/fluentd
 
 ## Examples
 
-Sample values.yaml files for deploying Fluentd with the 10x [Regulator](https://doc.log10x.com/apps/regulator/) can be found [here](https://github.com/log-10x/fluent-helm-charts/tree/main/samples). Set `tenx.optimize: true` to enable optimization mode for lossless event compaction.
+Sample values.yaml files for deploying Fluentd with the 10x [Reducer](https://doc.log10x.com/apps/reducer/) can be found [here](https://github.com/log-10x/fluent-helm-charts/tree/main/samples). Set `tenx.optimize: true` to enable optimization mode for lossless event compaction.
 
 Full details on the base Fluentd chart can be found at the [original repo](https://github.com/fluent/helm-charts/tree/main/charts/fluentd)
 

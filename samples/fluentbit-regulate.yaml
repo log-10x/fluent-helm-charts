@@ -1,16 +1,16 @@
-# Sample values.yaml for deploying an 10x regulator with fluent-bit
+# Sample values.yaml for deploying an 10x reducer with fluent-bit
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the config.output and tenx-log-output.conf sections.
 #
 # For more info on deploying, see -
-# https://doc.log10x.com/apps/regulator/deploy/#fluent-bit
+# https://doc.log10x.com/apps/reducer/deploy/#fluent-bit
 #
 tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
 
 
-  runtimeName: "my-fluent-bit-regulator"
+  runtimeName: "my-fluent-bit-reducer"
 
   configFiles:
     # Edit this section to change which events to pass to 10x to regulate.

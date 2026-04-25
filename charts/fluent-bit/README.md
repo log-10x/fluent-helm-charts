@@ -6,7 +6,7 @@
 
 ## Overview
 
-This chart is intended to set up a Fluent Bit daemonset with the 10x [Regulator](https://doc.log10x.com/apps/regulator/) app
+This chart is intended to set up a Fluent Bit daemonset with the 10x [Reducer](https://doc.log10x.com/apps/reducer/) app
 
 The chart is derived from the base [Fluent Bit chart](https://github.com/fluent/helm-charts/tree/main/charts/fluent-bit), with some key differences which enable Fluent Bit to work with 10x:
 
@@ -34,7 +34,7 @@ helm install fluent-bit log10x-fluent/fluent-bit
 
 ## Examples
 
-Sample values.yaml files for deploying Fluent Bit with the 10x [Regulator](https://doc.log10x.com/apps/regulator/) can be found [here](https://github.com/log-10x/fluent-helm-charts/tree/main/samples). Set `tenx.optimize: true` to enable optimization mode for lossless event compaction.
+Sample values.yaml files for deploying Fluent Bit with the 10x [Reducer](https://doc.log10x.com/apps/reducer/) can be found [here](https://github.com/log-10x/fluent-helm-charts/tree/main/samples). Set `tenx.optimize: true` to enable optimization mode for lossless event compaction.
 
 Full details on the base Fluent Bit chart can be found at the [original repo](https://github.com/fluent/helm-charts/tree/main/charts/fluent-bit)
 
@@ -62,7 +62,7 @@ Specifies the 10x distribution. Options: `jit` (default), `native`. For more det
 Your 10x API key for metrics reporting. Default: `"NO-API-KEY"`
 
 ### tenx.optimize
-Enable optimization mode to losslessly compact events for 50-65% volume reduction. Default: `false`. When disabled, the regulator filters events but emits them in their original form.
+Enable optimization mode to losslessly compact events for 50-65% volume reduction. Default: `false`. When disabled, the reducer filters events but emits them in their original form.
 
 ### tenx.gitToken
 Git access token for fetching config/symbols from private Git repositories. Works with any Git provider (GitHub, GitLab, Bitbucket, self-hosted). When set, a Kubernetes Secret is created and injected via `secretKeyRef`.
