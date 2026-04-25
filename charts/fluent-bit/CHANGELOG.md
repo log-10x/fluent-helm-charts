@@ -22,8 +22,8 @@
 
 ### Removed
 
-- Removed `tenx.kind` option (report/regulate/optimize) — chart is now hardcoded to regulator mode
-- Removed reporter and optimizer Lua scripts and config entries — use regulator with `tenx.optimize=true` for optimization
+- Removed `tenx.kind` option (report/regulate/optimize) — chart is now hardcoded to reducer mode
+- Removed reporter and optimizer Lua scripts and config entries — use reducer with `tenx.optimize=true` for optimization
 
 ### Added
 

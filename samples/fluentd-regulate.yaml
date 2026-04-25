@@ -1,16 +1,16 @@
-# Sample values.yaml for deploying an 10x regulator with fluentd
+# Sample values.yaml for deploying an 10x reducer with fluentd
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the outputConfigs section.
 #
 # For more info on deploying, see -
-# https://doc.log10x.com/apps/regulator/deploy/#fluentd
+# https://doc.log10x.com/apps/reducer/deploy/#fluentd
 #
 tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
 
 
-  runtimeName: "my-fluentd-regulator"
+  runtimeName: "my-fluentd-reducer"
 
   fileConfigs:
     regulate:
