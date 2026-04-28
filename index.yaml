@@ -343,6 +343,36 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: "Upgraded 10x engine to appVersion 1.0."
+    apiVersion: v2
+    appVersion: 1.0.9
+    created: "2026-04-28T08:36:39.571231678Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 4dfe4bd5440c5c9017d82a1bafcf619f377f4fdee36d4fba3357e37171583fa9
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluentd
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluentd
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-1.0.9/fluentd-1.0.9.tgz
+    version: 1.0.9
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: "Renamed regulator to reducer (cosmetic) — regulatorOptimize env → reducerOptimize. Pipeline action verb regulate and config filenames preserved. Companion to log-10x/modules#21 and log-10x/config#20."
     apiVersion: v2
     appVersion: 1.0.7
@@ -592,4 +622,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
     version: 0.9.0
-generated: "2026-04-28T08:35:46.36652813Z"
+generated: "2026-04-28T08:36:39.571287843Z"
