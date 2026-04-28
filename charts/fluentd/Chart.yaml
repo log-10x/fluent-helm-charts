@@ -8,8 +8,8 @@ keywords:
   - fluent
   - fluentd
 # type: application
-version: 1.0.9
-appVersion: 1.0.9
+version: 1.0.12
+appVersion: 1.0.12
 icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
 home: https://github.com/log-10x/fluent-helm-charts
 sources:
@@ -23,4 +23,4 @@ maintainers:
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: "Upgraded 10x engine to version 1.0.9"
+      description: "Upgraded 10x engine to version 1.0.12 — completes the streamer→retriever rename inside the engine (pipeline app paths now resolve to @apps/retriever/* and the forward-output Fluentd tag is now tenx-cloud-retriever)"

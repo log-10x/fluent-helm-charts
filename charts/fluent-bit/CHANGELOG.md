@@ -14,6 +14,12 @@
 
 ## [UNRELEASED]
 
+## [v1.0.12] - 2026-04-28
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.12 — completes the streamer→retriever rename inside the engine. Pipeline app paths emitted at runtime now resolve to `@apps/retriever/*` (previously `@apps/streamer/*` against engine-bundled stale modules), and the forward-output Fluentd tag for retriever stream events is now `tenx-cloud-retriever` (previously `tenx-cloud-streamer`).
+
 ## [v1.0.9] - 2026-04-28
 
 ### Changed
