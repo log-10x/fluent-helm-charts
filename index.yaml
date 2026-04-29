@@ -3,6 +3,43 @@ entries:
   fluent-bit:
   - annotations:
       artifacthub.io/changes: |-
+        - kind: added
+          description: "New tenx.readOnly value (default false) — non-intervening reporter mode. When true, the embedded 10x sub-process reads, aggregates, and publishes TenXSummary metrics to the Log10x backend, but does not write events back to Fluent Bit. Events continue through the original Fluent Bit pipeline to the configured outputs unchanged. Replaces the prior @apps/reporter pairing for non-Fluent-Bit-DaemonSet integrations."
+        - kind: added
+          description: "tenx-report.conf filter entry under tenx.configFiles — mode-specific Lua filter (tenx-report.lua) used when tenx.readOnly: true. Launches the 10x sub-process with reducerReadOnly true and sets filterNonProcessed = false so events flow through Fluent Bit unmodified."
+        - kind: added
+          description: "Mutual-exclusion guard between tenx.readOnly and tenx.optimize in a dedicated templates/tenx-validate.yaml — fires on every helm install/upgrade, including when the user supplies existingConfigMap and bypasses the rendered ConfigMap."
+        - kind: changed
+          description: "ConfigMap (templates/configmap.yaml) now selects between three Lua filter variants (tenx-regulate.conf / tenx-optimize.conf / tenx-report.conf) based on tenx.readOnly and tenx.optimize. The Unix-socket return input (tenx-readback.conf) is skipped in read-only mode — there is no return loop to wire up."
+        - kind: fixed
+          description: "templates/_pod.tpl image-tag composition no longer applies a hardcoded jit fallback to tenx.variant. The default still ships in values.yaml (variant: jit), but explicit empty-string overrides are now respected — required for image tags that do not carry a jit or native suffix."
+    apiVersion: v1
+    appVersion: 1.0.13
+    created: "2026-04-29T14:35:00.466560399Z"
+    description: A Helm chart for Kubernetes for Fluent Bit log processor + 10x Observability
+      engine
+    digest: 0a5645ad0b8b94ef92762eb64b85b57ed7e8834f36aba3b579f81dde454ad1e5
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluent-bit
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluent-bit
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluent-bit/
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluent-bit-1.0.13/fluent-bit-1.0.13.tgz
+    version: 1.0.13
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: changed
           description: "Upgraded 10x engine to appVersion 1.0.12 — completes the streamer→retriever rename inside the engine. Pipeline app paths emitted at runtime now resolve to @apps/retriever/* (previously @apps/streamer/* against engine-bundled stale modules), and the forward-output Fluentd tag for retriever stream events is now tenx-cloud-retriever (previously tenx-cloud-streamer)."
     apiVersion: v1
@@ -681,4 +718,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
     version: 0.9.0
-generated: "2026-04-28T11:07:18.292870931Z"
+generated: "2026-04-29T14:35:00.466610825Z"
