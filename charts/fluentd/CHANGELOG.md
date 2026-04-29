@@ -14,6 +14,18 @@
 
 ## [UNRELEASED]
 
+## [v1.0.13] - 2026-04-29
+
+### Added
+
+- New `tenx.readOnly` value (default `false`) — non-intervening reporter mode. When `true`, the embedded 10x sub-process reads, aggregates, and publishes `TenXSummary` metrics to the Log10x backend, but does **not** write events back to Fluentd. Events continue through the original Fluentd pipeline to the configured outputs unchanged. Replaces the prior `@apps/reporter` pairing for non-Fluent-Bit-DaemonSet integrations.
+- `00_tenx_report.conf` and `04_outputs_report.conf` entries under `tenx.fileConfigs` — mode-specific configs used when `tenx.readOnly: true`. The first launches the 10x exec_filter with `reducerReadOnly true` (no return source); the second routes `@OUTPUT` through a `<copy>` that fans out to BOTH `@TENX` (for aggregation; no return loop) AND `@FINAL-OUTPUT` (the original Fluentd output pipeline, untouched).
+- Mutual-exclusion guard between `tenx.readOnly` and `tenx.optimize` in a dedicated `templates/tenx-validate.yaml` — fires on every `helm install`/`upgrade`, including when the user supplies `extraFilesConfigMapNameOverride` and bypasses the rendered ConfigMap.
+
+### Changed
+
+- ConfigMap rendering (`templates/fluentd-configurations-cm.yaml`) now selects the right `00_tenx_*.conf` and `04_outputs*.conf` pair based on `tenx.readOnly` and `tenx.optimize`. Templates output (`tenx.outputConfigs` entries containing `templates`) is only emitted in optimize mode.
+
 ## [v1.0.12] - 2026-04-28
 
 ### Changed

@@ -1,0 +1,10 @@
+{{- /*
+   Values-level validation for the tenx mode flags. Runs on every helm
+   install/upgrade regardless of whether a user provides their own ConfigMap
+   via `existingConfigMap` (which would skip the configmap.yaml template).
+
+   Renders to nothing on success — Helm tolerates empty template output.
+*/ -}}
+{{- if and .Values.tenx.enabled .Values.tenx.readOnly .Values.tenx.optimize -}}
+{{- fail "tenx.readOnly and tenx.optimize are mutually exclusive: read-only suppresses the return loop, so optimize would have nothing to encode. Set at most one." -}}
+{{- end -}}

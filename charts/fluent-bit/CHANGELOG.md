@@ -14,6 +14,22 @@
 
 ## [UNRELEASED]
 
+## [v1.0.13] - 2026-04-29
+
+### Added
+
+- New `tenx.readOnly` value (default `false`) — non-intervening reporter mode. When `true`, the embedded 10x sub-process reads, aggregates, and publishes `TenXSummary` metrics to the Log10x backend, but does **not** write events back to Fluent Bit. Events continue through the original Fluent Bit pipeline to the configured outputs unchanged. Replaces the prior `@apps/reporter` pairing for non-Fluent-Bit-DaemonSet integrations.
+- `tenx-report.conf` filter entry under `tenx.configFiles` — mode-specific Lua filter (`tenx-report.lua`) used when `tenx.readOnly: true`. Launches the 10x sub-process with `reducerReadOnly true` and sets `filterNonProcessed = false` so events flow through Fluent Bit unmodified.
+- Mutual-exclusion guard between `tenx.readOnly` and `tenx.optimize` in a dedicated `templates/tenx-validate.yaml` — fires on every `helm install`/`upgrade`, including when the user supplies `existingConfigMap` and bypasses the rendered ConfigMap.
+
+### Changed
+
+- ConfigMap (`templates/configmap.yaml`) now selects between three Lua filter variants (`tenx-regulate.conf` / `tenx-optimize.conf` / `tenx-report.conf`) based on `tenx.readOnly` and `tenx.optimize`. The Unix-socket return input (`tenx-readback.conf`) is **skipped** in read-only mode — there is no return loop to wire up.
+
+### Fixed
+
+- `templates/_pod.tpl` image-tag composition no longer applies a hardcoded jit fallback to `tenx.variant`. The default still ships in `values.yaml` (variant: jit), but explicit empty-string overrides are now respected — required for image tags that do not carry a jit or native suffix.
+
 ## [v1.0.12] - 2026-04-28
 
 ### Changed

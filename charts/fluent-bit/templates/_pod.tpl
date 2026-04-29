@@ -81,7 +81,7 @@ containers:
     securityContext:
       {{- toYaml . | nindent 6 }}
   {{- end }}
-    image: {{ include "fluent-bit.image" (merge .Values.image (dict "tag" (default .Chart.AppVersion .Values.image.tag)) (dict "variant" (default "jit" .Values.tenx.variant))) | quote }}
+    image: {{ include "fluent-bit.image" (merge .Values.image (dict "tag" (default .Chart.AppVersion .Values.image.tag)) (dict "variant" .Values.tenx.variant)) | quote }}
     imagePullPolicy: {{ .Values.image.pullPolicy }}
     env:
     {{- if .Values.tenx.enabled }}

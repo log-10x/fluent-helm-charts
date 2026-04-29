@@ -38,6 +38,13 @@ tenx:
   # When true, the reducer also losslessly compacts surviving events (50-65% volume reduction).
   optimize: false
 
+  # Enable read-only mode (non-intervening reporter). When true, 10x reads,
+  # aggregates and publishes TenXSummary metrics to the log10x backend, but
+  # does NOT write events back. Events flow through Fluent Bit unchanged to
+  # the original outputs — no return loop, no readback Unix socket.
+  # Mutually exclusive with `optimize` (read-only output is suppressed anyway).
+  readOnly: false
+
   # Specify name for the 10x runtime
   # If empty, will use default from 10x configuration
   runtimeName:
@@ -119,6 +126,17 @@ tenx:
           Name Lua
           Match *
           script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-optimize.lua
+          call tenx_process
+
+    # Setting up the 10x reporter pipeline as a Lua filter (reducer with read-only enabled).
+    # Used when tenx.readOnly is true — 10x is a passive observer; events flow through
+    # Fluent Bit unchanged. No return loop, no readback Unix socket.
+    #
+    tenx-report.conf: |
+      [FILTER]
+          Name Lua
+          Match *
+          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-report.lua
           call tenx_process
 
     # Setting and input for reading the internal 10x log, which fluent-bit can forward to the selected output (see below)
