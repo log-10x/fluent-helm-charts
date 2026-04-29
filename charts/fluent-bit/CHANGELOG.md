@@ -28,7 +28,7 @@
 
 ### Fixed
 
-- `templates/_pod.tpl` image-tag composition no longer applies a hardcoded `default "jit"` to `tenx.variant`. The default still ships in `values.yaml` (`tenx.variant: jit`), but explicit empty-string overrides are now respected — required for image tags that don't carry a `-jit`/`-native` suffix.
+- `templates/_pod.tpl` image-tag composition no longer applies a hardcoded jit fallback to `tenx.variant`. The default still ships in `values.yaml` (variant: jit), but explicit empty-string overrides are now respected — required for image tags that do not carry a jit or native suffix.
 
 ## [v1.0.12] - 2026-04-28
 
