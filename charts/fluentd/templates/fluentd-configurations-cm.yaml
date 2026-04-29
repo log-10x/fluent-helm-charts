@@ -12,23 +12,37 @@ data:
     {{- $value | nindent 4 }}
 {{- end }}
 {{- if .Values.tenx.enabled }}
+{{- /*
+  Mode-specific tenx.fileConfigs entries are picked below. Skip the prefixed
+  variants here (00_tenx_*, 04_outputs*) — only emit the right one for the mode.
+*/}}
 {{- range $key, $value := .Values.tenx.fileConfigs }}
 {{- if ne $key "TenXLogs" }}
-{{- if and (not (eq $key "00_tenx_optimize.conf")) (not (eq $key "00_tenx_regulate.conf")) }}
+{{- if and (not (hasPrefix "00_tenx_" $key)) (not (hasPrefix "04_outputs" $key)) }}
   {{$key }}: |-
     {{- $value | nindent 4 }}
 {{- end }}
 {{- end }}
 {{- end }}
-{{- if $.Values.tenx.optimize }}
+{{- if $.Values.tenx.readOnly }}
+  00_tenx.conf: |-
+    {{- (index .Values.tenx.fileConfigs "00_tenx_report.conf") | nindent 4 }}
+  04_outputs.conf: |-
+    {{- (index .Values.tenx.fileConfigs "04_outputs_report.conf") | nindent 4 }}
+{{- else if $.Values.tenx.optimize }}
   00_tenx.conf: |-
     {{- (index .Values.tenx.fileConfigs "00_tenx_optimize.conf") | nindent 4 }}
+  04_outputs.conf: |-
+    {{- (index .Values.tenx.fileConfigs "04_outputs.conf") | nindent 4 }}
 {{- else }}
   00_tenx.conf: |-
     {{- (index .Values.tenx.fileConfigs "00_tenx_regulate.conf") | nindent 4 }}
+  04_outputs.conf: |-
+    {{- (index .Values.tenx.fileConfigs "04_outputs.conf") | nindent 4 }}
 {{- end }}
 {{- range $key, $value := .Values.tenx.outputConfigs }}
-{{- if or $.Values.tenx.optimize (not (contains "templates" $key)) }}
+{{- /* Templates output is only relevant in optimize mode (compacted events emit templates). */}}
+{{- if or (and $.Values.tenx.optimize (not $.Values.tenx.readOnly)) (not (contains "templates" $key)) }}
   {{$key }}: |-
     {{- $value | nindent 4 }}
 {{- end }}

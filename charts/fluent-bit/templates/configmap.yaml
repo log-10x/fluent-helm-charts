@@ -13,17 +13,26 @@ data:
   fluent-bit.conf: |
     {{- (tpl .Values.config.service $)  | nindent 4 }}
     {{- (tpl .Values.config.inputs $)  | nindent 4 }}
+  {{- /*
+    The tenx-readback Unix socket input only exists for the regulate/optimize
+    return loop. readOnly mode does not write events back, so we skip it —
+    events stay on the original Fluent Bit pipeline.
+  */}}
+  {{- if not .Values.tenx.readOnly }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-readback.conf") $) | nindent 4 }}
+  {{- end }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-log-input.conf") $) | nindent 4 }}
     {{- (tpl .Values.config.filters $)  | nindent 4 }}
-  {{- if .Values.tenx.optimize }}
+  {{- if .Values.tenx.readOnly }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-report.conf") $) | nindent 4 }}
+  {{- else if .Values.tenx.optimize }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-optimize.conf") $) | nindent 4 }}
   {{- else }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-regulate.conf") $) | nindent 4 }}
   {{- end }}
     {{- (tpl .Values.config.outputs $)  | nindent 4 }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-log-output.conf") $) | nindent 4 }}
-  {{- if .Values.tenx.optimize }}
+  {{- if and (not .Values.tenx.readOnly) .Values.tenx.optimize }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-templates-output.conf") $) | nindent 4 }}
   {{- end }}
   {{- else }}
