@@ -27,4 +27,4 @@ annotations:
     - kind: changed
       description: "ConfigMap rendering selects between regulate, optimize and report Lua filter variants based on tenx.readOnly and tenx.optimize. The Unix-socket return input (tenx-readback.conf) is skipped entirely in read-only mode — no return loop to wire."
     - kind: fixed
-      description: "Image-tag composition in templates/_pod.tpl no longer hardcodes default \"jit\" for tenx.variant, so explicit empty-string overrides are honored — required for image tags that don't carry a -jit/-native suffix."
+      description: "Image-tag composition in templates/_pod.tpl no longer applies a hardcoded jit fallback to tenx.variant, so explicit empty-string overrides are honored — required for image tags that do not carry a jit or native suffix."
