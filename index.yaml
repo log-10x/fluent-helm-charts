@@ -408,6 +408,42 @@ entries:
   fluentd:
   - annotations:
       artifacthub.io/changes: |-
+        - kind: added
+          description: "New tenx.readOnly value (default false) — non-intervening reporter mode. When true, the embedded 10x sub-process reads, aggregates, and publishes TenXSummary metrics to the Log10x backend, but does not write events back to Fluentd. Events continue through the original Fluentd pipeline to the configured outputs unchanged. Replaces the prior @apps/reporter pairing for non-Fluent-Bit-DaemonSet integrations."
+        - kind: added
+          description: "00_tenx_report.conf and 04_outputs_report.conf entries under tenx.fileConfigs — mode-specific configs used when tenx.readOnly: true. The first launches the 10x exec_filter with reducerReadOnly true (no return source); the second routes @OUTPUT through a <copy> that fans out to BOTH @TENX (for aggregation; no return loop) AND @FINAL-OUTPUT (the original Fluentd output pipeline, untouched)."
+        - kind: added
+          description: "Mutual-exclusion guard between tenx.readOnly and tenx.optimize in a dedicated templates/tenx-validate.yaml — fires on every helm install/upgrade, including when the user supplies extraFilesConfigMapNameOverride and bypasses the rendered ConfigMap."
+        - kind: changed
+          description: "ConfigMap rendering (templates/fluentd-configurations-cm.yaml) now selects the right 00_tenx_*.conf and 04_outputs*.conf pair based on tenx.readOnly and tenx.optimize. Templates output (tenx.outputConfigs entries containing templates) is only emitted in optimize mode."
+    apiVersion: v2
+    appVersion: 1.0.13
+    created: "2026-04-29T14:35:37.996604399Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 863eba79bbfd9b903907405d22af0bd77f1338956ff362691081fca45b96d303
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluentd
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluentd
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-1.0.13/fluentd-1.0.13.tgz
+    version: 1.0.13
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: changed
           description: "Upgraded 10x engine to appVersion 1.0.12 — completes the streamer→retriever rename inside the engine. Pipeline app paths emitted at runtime now resolve to @apps/retriever/* (previously @apps/streamer/* against engine-bundled stale modules), and the forward-output Fluentd tag for retriever stream events is now tenx-cloud-retriever (previously tenx-cloud-streamer)."
     apiVersion: v2
@@ -718,4 +754,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
     version: 0.9.0
-generated: "2026-04-29T14:35:00.466610825Z"
+generated: "2026-04-29T14:35:37.996667938Z"
