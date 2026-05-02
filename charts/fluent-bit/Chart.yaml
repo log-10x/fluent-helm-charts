@@ -7,8 +7,8 @@ keywords:
   - logging
   - fluent
   - fluent-bit
-version: 1.0.17
-appVersion: 1.0.17
+version: 1.0.19
+appVersion: 1.0.19
 icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
 home: https://github.com/log-10x/fluent-helm-charts
 sources:
@@ -21,6 +21,6 @@ maintainers:
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: "Bumped engine appVersion to 1.0.17 with the Receiver app rename. Bundled modules now ship apps slash receiver. Chart launch args target the receiver app instead of the reducer app."
+      description: "Bumped engine appVersion to 1.0.19 with the Receiver app rename and renamed engine options. The chart now launches the engine with receiverOptimize and receiverReadOnly options (was reducerOptimize and reducerReadOnly)."
     - kind: changed
-      description: "Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers reducerOptimize and reducerReadOnly are unchanged. The Prometheus label tenx_app value reducer is unchanged. No metric churn."
+      description: "Chart prose and values comments updated to reference Receiver instead of Reducer. The Prometheus label tenx_app value reducer is unchanged. No metric churn."

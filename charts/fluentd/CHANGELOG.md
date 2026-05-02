@@ -14,12 +14,19 @@
 
 ## [UNRELEASED]
 
+## [v1.0.19] - 2026-05-02
+
+### Changed
+
+- Bumped engine appVersion to 1.0.19 with the Receiver app rename and renamed engine options. Chart now launches the engine with receiverOptimize and receiverReadOnly options.
+- Chart prose and values comments updated to reference Receiver instead of Reducer. The Prometheus label tenx_app value reducer is unchanged.
+
 ## [v1.0.17] - 2026-05-02
 
 ### Changed
 
 - Bumped engine appVersion to 1.0.17 with the Receiver app rename baked in. Bundled modules now ship apps slash receiver in place of apps slash reducer. Chart launch args target the receiver app.
-- Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers reducerOptimize and reducerReadOnly are preserved unchanged.
+- Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers receiverOptimize and receiverReadOnly are preserved unchanged.
 
 ## [v1.0.16] - 2026-05-02
 
@@ -32,7 +39,7 @@
 ### Added
 
 - New `tenx.readOnly` value (default `false`) — non-intervening reporter mode. When `true`, the embedded 10x sub-process reads, aggregates, and publishes `TenXSummary` metrics to the Log10x backend, but does **not** write events back to Fluentd. Events continue through the original Fluentd pipeline to the configured outputs unchanged. Replaces the prior `@apps/reporter` pairing for non-Fluent-Bit-DaemonSet integrations.
-- `00_tenx_report.conf` and `04_outputs_report.conf` entries under `tenx.fileConfigs` — mode-specific configs used when `tenx.readOnly: true`. The first launches the 10x exec_filter with `reducerReadOnly true` (no return source); the second routes `@OUTPUT` through a `<copy>` that fans out to BOTH `@TENX` (for aggregation; no return loop) AND `@FINAL-OUTPUT` (the original Fluentd output pipeline, untouched).
+- `00_tenx_report.conf` and `04_outputs_report.conf` entries under `tenx.fileConfigs` — mode-specific configs used when `tenx.readOnly: true`. The first launches the 10x exec_filter with `receiverReadOnly true` (no return source); the second routes `@OUTPUT` through a `<copy>` that fans out to BOTH `@TENX` (for aggregation; no return loop) AND `@FINAL-OUTPUT` (the original Fluentd output pipeline, untouched).
 - Mutual-exclusion guard between `tenx.readOnly` and `tenx.optimize` in a dedicated `templates/tenx-validate.yaml` — fires on every `helm install`/`upgrade`, including when the user supplies `extraFilesConfigMapNameOverride` and bypasses the rendered ConfigMap.
 
 ### Changed
@@ -55,7 +62,7 @@
 
 ### Changed
 
-- Renamed regulator to reducer (cosmetic) — `regulatorOptimize` env → `reducerOptimize`. Pipeline action verb `regulate` and config filenames preserved. Companion to log-10x/modules#21 and log-10x/config#20.
+- Renamed regulator to reducer (cosmetic) — `regulatorOptimize` env → `receiverOptimize`. Pipeline action verb `regulate` and config filenames preserved. Companion to log-10x/modules#21 and log-10x/config#20.
 
 ## [v1.0.7] - 2026-04-22
 
