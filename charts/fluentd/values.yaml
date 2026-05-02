@@ -33,8 +33,8 @@ tenx:
   apiKey: "NO-API-KEY"
 
   # Enable optimization mode to encode emitted events for volume reduction.
-  # When false (default), the reducer filters events but emits them in their original form.
-  # When true, the reducer also losslessly compacts surviving events (50-65% volume reduction).
+  # When false (default), the receiver filters events but emits them in their original form.
+  # When true, the receiver also losslessly compacts surviving events (50-65% volume reduction).
   optimize: false
 
   # Enable read-only mode (non-intervening reporter). When true, 10x reads,
@@ -126,7 +126,7 @@ tenx:
   #
   fileConfigs:
     # Fluentd config for passing events into the 10x pipeline via Unix socket.
-    # When optimize is true, uses the optimize conf which adds reducerOptimize flag.
+    # When optimize is true, uses the optimize conf which adds receiverOptimize flag.
     #
     00_tenx_regulate.conf: |-
       @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-regulate-unix.conf"
@@ -141,7 +141,7 @@ tenx:
     00_tenx_report.conf: |-
       @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-report-unix.conf"
 
-    # Controls which events are emitted into the 10x reducer.
+    # Controls which events are emitted into the 10x receiver.
     # Works by applying the @TENX label.
     #
     # Events which aren't meant to be regulated should have the @FINAL-OUTPUT label applied instead.
