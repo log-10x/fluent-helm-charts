@@ -4,7 +4,7 @@
 # in the config.output, tenx-log-output.conf and tenx-templates-output.conf sections.
 #
 # For more info on deploying, see -
-# https://doc.log10x.com/apps/reducer/deploy/#fluent-bit
+# https://doc.log10x.com/apps/receiver/deploy/#fluent-bit
 #
 tenx:
   license: "<YOUR-10X-LICENSE-HERE>"

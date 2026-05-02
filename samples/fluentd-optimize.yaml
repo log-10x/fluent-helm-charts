@@ -4,7 +4,7 @@
 # in the outputConfigs section.
 #
 # For more info on deploying, see -
-# https://doc.log10x.com/apps/reducer/deploy/#fluentd
+# https://doc.log10x.com/apps/receiver/deploy/#fluentd
 #
 tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
