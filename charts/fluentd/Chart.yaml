@@ -22,11 +22,7 @@ maintainers:
     email: engineering@log10x.com
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: "tenx.readOnly value (default false) — non-intervening reporter mode. The embedded 10x sub-process reads, aggregates and publishes TenXSummary metrics but does not write events back to Fluentd. Replaces the prior @apps/reporter pairing for non-Fluent-Bit-DaemonSet integrations."
-    - kind: added
-      description: "00_tenx_report.conf and 04_outputs_report.conf entries under tenx.fileConfigs. The latter routes @OUTPUT through a copy directive that fans out to BOTH @TENX (for aggregation, no return loop) AND @FINAL-OUTPUT (the original Fluentd output pipeline, untouched)."
-    - kind: added
-      description: "Dedicated tenx-validate.yaml template that fails helm install/upgrade if both tenx.readOnly and tenx.optimize are set true (mutually exclusive)."
     - kind: changed
-      description: "ConfigMap rendering selects the right 00_tenx_*.conf and 04_outputs*.conf pair based on tenx.readOnly and tenx.optimize. Templates output is only emitted in optimize mode."
+      description: "Bumped engine appVersion to 1.0.17. Engine 1.0.17 ships the Reducer to Receiver app rename. Bundled modules now contain apps/receiver (with apps/reducer removed). Chart-side launch args emit @apps/receiver instead of @apps/reducer."
+    - kind: changed
+      description: "Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers reducerOptimize and reducerReadOnly are unchanged. Prometheus label tenx_app reducer is unchanged. No metric churn."
