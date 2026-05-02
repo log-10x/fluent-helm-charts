@@ -21,6 +21,6 @@ maintainers:
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: "Bumped engine appVersion to 1.0.17. Engine 1.0.17 ships the Reducer to Receiver app rename. Bundled modules now contain apps/receiver (with apps/reducer removed). Chart-side launch args emit @apps/receiver instead of @apps/reducer."
+      description: "Bumped engine appVersion to 1.0.17 with the Receiver app rename. Bundled modules now ship apps slash receiver. Chart launch args target the receiver app instead of the reducer app."
     - kind: changed
-      description: "Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers reducerOptimize and reducerReadOnly are unchanged. Prometheus label tenx_app reducer is unchanged. No metric churn."
+      description: "Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers reducerOptimize and reducerReadOnly are unchanged. The Prometheus label tenx_app value reducer is unchanged. No metric churn."
