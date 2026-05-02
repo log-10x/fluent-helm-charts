@@ -18,14 +18,14 @@
 
 ### Changed
 
-- Bumped engine appVersion to 1.0.17. Engine 1.0.17 ships the Reducer→Receiver app rename: bundled modules now contain `apps/receiver/` (with `apps/reducer/` removed), and chart-side launch args emit `@apps/receiver` instead of `@apps/reducer`. Plus the modules#34 logstash JS expression fix and modules#33 fluentd `tenx-optimize-unix.conf` launch-arg fix that engine 1.0.16 was missing.
-- Chart prose + values comments updated to reference "Receiver" instead of "Reducer". Engine identifiers (`reducerOptimize`, `reducerReadOnly`) and the Prometheus label `tenx_app="reducer"` are unchanged — no metric churn.
+- Bumped engine appVersion to 1.0.17 with the Receiver app rename baked in. Bundled modules now ship apps slash receiver in place of apps slash reducer. Chart launch args target the receiver app.
+- Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers reducerOptimize and reducerReadOnly are preserved unchanged.
 
 ## [v1.0.16] - 2026-05-02
 
 ### Changed
 
-- Bumped engine appVersion to 1.0.16. First chart release with the `apps/receiver` launch path (paired with the corresponding modules + config rename).
+- Bumped engine appVersion to 1.0.16 with the Receiver app rename baked in.
 
 ## [v1.0.13] - 2026-04-29
 
