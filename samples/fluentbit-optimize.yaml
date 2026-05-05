@@ -1,4 +1,4 @@
-# Sample values.yaml for deploying an 10x reducer with fluent-bit
+# Sample values.yaml for deploying an 10x receiver with fluent-bit
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the config.output, tenx-log-output.conf and tenx-templates-output.conf sections.
@@ -14,8 +14,7 @@ tenx:
   runtimeName: "my-fluent-bit-optimizer"
 
   configFiles:
-    # Edit this section to change which events to pass to 10x to optimize.
-    #
+    # Edit this section to scope which events the 10x Receiver compacts in optimize mode.
     # Defaults to passing all events to 10x.
     #
     tenx-optimize.conf: |

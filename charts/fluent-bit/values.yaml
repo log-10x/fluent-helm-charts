@@ -97,29 +97,26 @@ tenx:
   # These appear AFTER the fluent-bit inputs/filters/outputs defined in the 'config' section below.
   #
   configFiles:
-    # Setting up a unix socket input for reading back regulated/optimized events from 10x
+    # Unix socket input for reading filtered/optimized events back from 10x.
     #
-    # Using absolute include path and not utilizing ${TENX_MODULES} because currently fluent-bit
-    # can't resolve environment vars as part of @INCLUDE
-    #
-    # See https://github.com/fluent/fluent-bit/issues/2020
+    # Uses an absolute include path because fluent-bit's @INCLUDE does not
+    # expand environment variables. See https://github.com/fluent/fluent-bit/issues/2020
     #
     tenx-readback.conf: |
       @INCLUDE /opt/tenx-edge/lib/app/modules/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-unix.conf
 
-    # Setting up the 10x receiver pipeline as a Lua filter.
+    # 10x Receiver pipeline (default mode) — filters events as a Lua filter.
+    # https://github.com/log-10x/modules/blob/main/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-receive.conf
     #
-    # https://github.com/log-10x/modules/blob/main/pipelines/run/modules/input/forwarder/fluentbit/conf/tenx-regulate.conf
-    #
-    tenx-regulate.conf: |
+    tenx-receive.conf: |
       [FILTER]
           Name Lua
           Match *
-          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-regulate.lua
+          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-receive.lua
           call tenx_process
 
-    # Setting up the 10x optimizer pipeline as a Lua filter (receiver with optimization enabled).
-    # Used when tenx.optimize is true.
+    # 10x Receiver pipeline in optimize mode — filters and losslessly compacts events.
+    # Selected when tenx.optimize is true.
     #
     tenx-optimize.conf: |
       [FILTER]
@@ -128,9 +125,9 @@ tenx:
           script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-optimize.lua
           call tenx_process
 
-    # Setting up the 10x reporter pipeline as a Lua filter (receiver with read-only enabled).
-    # Used when tenx.readOnly is true — 10x is a passive observer; events flow through
-    # Fluent Bit unchanged. No return loop, no readback Unix socket.
+    # 10x Receiver pipeline in read-only mode — events flow through Fluent Bit unchanged
+    # while 10x observes and emits metrics. Selected when tenx.readOnly is true.
+    # No return loop and no readback Unix socket in this mode.
     #
     tenx-report.conf: |
       [FILTER]
@@ -139,7 +136,7 @@ tenx:
           script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-report.lua
           call tenx_process
 
-    # Setting and input for reading the internal 10x log, which fluent-bit can forward to the selected output (see below)
+    # Input for reading the internal 10x log so fluent-bit can forward it to the selected output below.
     #
     tenx-log-input.conf: |
       [INPUT]

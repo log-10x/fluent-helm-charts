@@ -95,7 +95,7 @@ containers:
         value: {{ .Values.tenx.apiKey | quote }}
     {{- end }}
       - name: FLUENT_BIT_CONF_FILE
-        value: "/fluent-bit/etc/conf/tenx-main-regulate.conf"
+        value: "/fluent-bit/etc/conf/tenx-main-receive.conf"
     {{- if .Values.tenx.runtimeName }}
       - name: TENX_RUNTIME_NAME
         value: {{ .Values.tenx.runtimeName | quote }}

@@ -1,4 +1,4 @@
-# Sample values.yaml for deploying an 10x reducer with fluent-bit
+# Sample values.yaml for deploying an 10x receiver with fluent-bit
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the config.output and tenx-log-output.conf sections.
@@ -10,18 +10,17 @@ tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
 
 
-  runtimeName: "my-fluent-bit-reducer"
+  runtimeName: "my-fluent-bit-receiver"
 
   configFiles:
-    # Edit this section to change which events to pass to 10x to regulate.
-    #
+    # Edit this section to scope which events the 10x Receiver filters.
     # Defaults to passing all events to 10x.
     #
-    tenx-regulate.conf: |
+    tenx-receive.conf: |
       [FILTER]
           Name Lua
           Match *
-          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-regulate.lua
+          script ${TENX_MODULES}/pipelines/run/modules/input/forwarder/fluentbit/conf/lua/tenx-receive.lua
           call tenx_process
 
     tenx-log-output.conf: |

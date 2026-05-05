@@ -1,4 +1,4 @@
-# Sample values.yaml for deploying an 10x reducer with fluentd
+# Sample values.yaml for deploying an 10x receiver with fluentd
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the outputConfigs section.
@@ -10,35 +10,33 @@ tenx:
   license: "<YOUR-10X-LICENSE-HERE>"
 
 
-  runtimeName: "my-fluentd-reducer"
+  runtimeName: "my-fluentd-receiver"
 
   fileConfigs:
-    regulate:
-      # Edit this section to change which events to pass to 10x to regulate.
-      #
-      # Defaults to passing all events to 10x.
-      #
-      04_outputs.conf: |-
-        <label @OUTPUT>
-          <match **>
-            @type relabel
-            @label @TENX
-          </match>
-        </label>
-      #
-      # Example of only passing some events:
-      #
-      # 04_outputs.conf: |-
-      #   <label @OUTPUT>
-      #     <match Some.Tag.To.Regulate>
-      #       @type relabel
-      #       @label @TENX
-      #     </match>
-      #     <match **>
-      #       @type relabel
-      #       @label @FINAL-OUTPUT
-      #     </match>
-      #   </label>
+    # Edit this section to scope which events the 10x Receiver filters.
+    # Defaults to passing all events to 10x.
+    #
+    04_outputs.conf: |-
+      <label @OUTPUT>
+        <match **>
+          @type relabel
+          @label @TENX
+        </match>
+      </label>
+    #
+    # Example of only passing some events:
+    #
+    # 04_outputs.conf: |-
+    #   <label @OUTPUT>
+    #     <match Some.Tag.To.Filter>
+    #       @type relabel
+    #       @label @TENX
+    #     </match>
+    #     <match **>
+    #       @type relabel
+    #       @label @FINAL-OUTPUT
+    #     </match>
+    #   </label>
 
   outputConfigs:
     06_final_output.conf: |-

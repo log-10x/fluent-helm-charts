@@ -125,28 +125,25 @@ tenx:
   # Config files used internally by the template to set up the fluentd configuration.
   #
   fileConfigs:
-    # Fluentd config for passing events into the 10x pipeline via Unix socket.
-    # When optimize is true, uses the optimize conf which adds receiverOptimize flag.
+    # 10x Receiver pipeline (default mode) — passes events into 10x via Unix socket
+    # for filtering. Optimize mode uses the variant below to also losslessly compact events.
     #
-    00_tenx_regulate.conf: |-
-      @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-regulate-unix.conf"
+    00_tenx_receive.conf: |-
+      @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-receive-unix.conf"
 
     00_tenx_optimize.conf: |-
       @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-optimize-unix.conf"
 
-    # Read-only / report mode. 10x is launched as a subprocess that ingests
-    # events for aggregation only — no return loop, no Unix socket source.
-    # The parallel @FINAL-OUTPUT route in 04_outputs_report.conf keeps the
-    # original Fluentd pipeline shipping events unchanged.
+    # Read-only mode. 10x runs as a subprocess that observes events for aggregation
+    # only — no return loop, no Unix socket source. The parallel @FINAL-OUTPUT route
+    # in 04_outputs_report.conf keeps the original Fluentd pipeline shipping events unchanged.
     00_tenx_report.conf: |-
       @include "#{ENV['TENX_MODULES']}/pipelines/run/modules/input/forwarder/fluentd/conf/tenx-report-unix.conf"
 
-    # Controls which events are emitted into the 10x receiver.
-    # Works by applying the @TENX label.
+    # Controls which events are passed to the 10x Receiver via the @TENX label.
+    # Events that should bypass 10x get the @FINAL-OUTPUT label instead.
     #
-    # Events which aren't meant to be regulated should have the @FINAL-OUTPUT label applied instead.
-    #
-    # Default behavior is to emit all events to 10x for regulating, edit this section to change.
+    # Default behavior passes all events to 10x. Edit this section to scope it down.
     #
     04_outputs.conf: |-
       <label @OUTPUT>
@@ -174,7 +171,7 @@ tenx:
         </match>
       </label>
 
-    # Routes all events coming back from 10x after being regulated to the final Fluentd output.
+    # Routes events emitted by 10x back to the final Fluentd output.
     #
     05_tenx_processed.conf: |-
       <label @TENX-PROCESSED>
