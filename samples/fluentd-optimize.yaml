@@ -1,4 +1,4 @@
-# Sample values.yaml for deploying an 10x reducer with optimization with fluentd
+# Sample values.yaml for deploying an 10x receiver with optimization with fluentd
 #
 # Make sure to add your 10x license, as well as setup your backend info
 # in the outputConfigs section.
@@ -14,32 +14,30 @@ tenx:
   runtimeName: "my-fluentd-optimizer"
 
   fileConfigs:
-    optimize:
-      # Edit this section to change which events to pass to 10x to optimize.
-      #
-      # Defaults to passing all events to 10x.
-      #
-      04_outputs.conf: |-
-        <label @OUTPUT>
-          <match **>
-            @type relabel
-            @label @TENX
-          </match>
-        </label>
-      #
-      # Example of only passing some events:
-      #
-      # 04_outputs.conf: |-
-      #   <label @OUTPUT>
-      #     <match Some.Tag.To.Optimize>
-      #       @type relabel
-      #       @label @TENX
-      #     </match>
-      #     <match **>
-      #       @type relabel
-      #       @label @FINAL-OUTPUT
-      #     </match>
-      #   </label>
+    # Edit this section to scope which events the 10x Receiver compacts in optimize mode.
+    # Defaults to passing all events to 10x.
+    #
+    04_outputs.conf: |-
+      <label @OUTPUT>
+        <match **>
+          @type relabel
+          @label @TENX
+        </match>
+      </label>
+    #
+    # Example of only passing some events:
+    #
+    # 04_outputs.conf: |-
+    #   <label @OUTPUT>
+    #     <match Some.Tag.To.Optimize>
+    #       @type relabel
+    #       @label @TENX
+    #     </match>
+    #     <match **>
+    #       @type relabel
+    #       @label @FINAL-OUTPUT
+    #     </match>
+    #   </label>
 
   outputConfigs:
     06_final_output.conf: |-

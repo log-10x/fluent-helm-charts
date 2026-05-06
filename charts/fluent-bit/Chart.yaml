@@ -7,8 +7,8 @@ keywords:
   - logging
   - fluent
   - fluent-bit
-version: 1.0.19
-appVersion: 1.0.19
+version: 1.0.20
+appVersion: 1.0.20
 icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
 home: https://github.com/log-10x/fluent-helm-charts
 sources:
@@ -21,6 +21,6 @@ maintainers:
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: "Bumped engine appVersion to 1.0.19 with the Receiver app rename and renamed engine options. The chart now launches the engine with receiverOptimize and receiverReadOnly options (was reducerOptimize and reducerReadOnly)."
+      description: "Chart values use tenx-receive.conf and tenx-receive.lua paths into the Receiver modules tree. Default mode emits the Prometheus tenx_app=receiver label."
     - kind: changed
-      description: "Chart prose and values comments updated to reference Receiver instead of Reducer. The Prometheus label tenx_app value reducer is unchanged. No metric churn."
+      description: "Sample values file is fluentbit-receive.yaml for the default filter mode."

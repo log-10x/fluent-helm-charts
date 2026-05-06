@@ -36,7 +36,7 @@ data:
     {{- (index .Values.tenx.fileConfigs "04_outputs.conf") | nindent 4 }}
 {{- else }}
   00_tenx.conf: |-
-    {{- (index .Values.tenx.fileConfigs "00_tenx_regulate.conf") | nindent 4 }}
+    {{- (index .Values.tenx.fileConfigs "00_tenx_receive.conf") | nindent 4 }}
   04_outputs.conf: |-
     {{- (index .Values.tenx.fileConfigs "04_outputs.conf") | nindent 4 }}
 {{- end }}

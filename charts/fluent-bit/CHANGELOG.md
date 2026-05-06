@@ -14,6 +14,13 @@
 
 ## [UNRELEASED]
 
+## [v1.0.20] - 2026-05-06
+
+### Changed
+
+- Chart values use tenx-receive.conf and tenx-receive.lua paths into the Receiver modules tree. Default mode emits the Prometheus tenx_app=receiver label.
+- Sample values file is fluentbit-receive.yaml for the default filter mode.
+
 ## [v1.0.19] - 2026-05-02
 
 ### Changed

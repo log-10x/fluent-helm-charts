@@ -23,7 +23,7 @@ data:
   {{- else if .Values.tenx.optimize }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-optimize.conf") $) | nindent 4 }}
   {{- else }}
-    {{- (tpl (index .Values.tenx.configFiles "tenx-regulate.conf") $) | nindent 4 }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-receive.conf") $) | nindent 4 }}
   {{- end }}
     {{- (tpl .Values.config.outputs $)  | nindent 4 }}
     {{- (tpl (index .Values.tenx.configFiles "tenx-log-output.conf") $) | nindent 4 }}

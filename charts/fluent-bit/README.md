@@ -62,7 +62,7 @@ Specifies the 10x distribution. Options: `jit` (default), `native`. For more det
 Your 10x API key for metrics reporting. Default: `"NO-API-KEY"`
 
 ### tenx.optimize
-Enable optimization mode to losslessly compact events for 50-65% volume reduction. Default: `false`. When disabled, the reducer filters events but emits them in their original form.
+Enable optimization mode to losslessly compact events for 50-65% volume reduction. Default: `false`. When disabled, the Receiver filters events but emits them in their original form.
 
 ### tenx.gitToken
 Git access token for fetching config/symbols from private Git repositories. Works with any Git provider (GitHub, GitLab, Bitbucket, self-hosted). When set, a Kubernetes Secret is created and injected via `secretKeyRef`.

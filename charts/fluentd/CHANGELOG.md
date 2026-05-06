@@ -14,6 +14,13 @@
 
 ## [UNRELEASED]
 
+## [v1.0.20] - 2026-05-06
+
+### Changed
+
+- Chart values use 00_tenx_receive.conf paths into the Receiver modules tree (tenx-receive-unix.conf). Default mode emits the Prometheus tenx_app=receiver label.
+- Sample values file is fluentd-receive.yaml for the default filter mode.
+
 ## [v1.0.19] - 2026-05-02
 
 ### Changed
