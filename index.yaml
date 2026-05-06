@@ -471,6 +471,38 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: "Chart values use 00_tenx_receive.conf paths into the Receiver modules tree (tenx-receive-unix.conf). Default mode emits the Prometheus tenx_app=receiver label."
+        - kind: changed
+          description: "Sample values file is fluentd-receive.yaml for the default filter mode."
+    apiVersion: v2
+    appVersion: 1.0.20
+    created: "2026-05-06T09:55:06.89724354Z"
+    description: A Helm chart for Kubernetes for Fluentd forwarders + 10x Observability
+      engine
+    digest: 02c340628bf6437c7b71c5c78ec556b5c6c2f3767d71a4d93a617fd4df0b8de9
+    home: https://github.com/log-10x/fluent-helm-charts
+    icon: https://raw.githubusercontent.com/log-10x/fluent-helm-charts/main/icon.png
+    keywords:
+    - 10x
+    - log10x
+    - logging
+    - fluent
+    - fluentd
+    maintainers:
+    - email: engineering@log10x.com
+      name: Log10x
+    name: fluentd
+    sources:
+    - https://github.com/log-10x/fluent-helm-charts
+    - https://github.com/log-10x/docker-images
+    - https://github.com/fluent/fluentd/
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    urls:
+    - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-1.0.20/fluentd-1.0.20.tgz
+    version: 1.0.20
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: "Bumped engine appVersion to 1.0.19 with the Receiver app rename and renamed engine options. Chart now launches the engine with receiverOptimize and receiverReadOnly options."
         - kind: changed
           description: "Chart prose and values comments updated to reference Receiver instead of Reducer. The Prometheus label tenx_app value reducer is unchanged."
@@ -848,4 +880,4 @@ entries:
     urls:
     - https://github.com/log-10x/fluent-helm-charts/releases/download/fluentd-0.9.0/fluentd-0.9.0.tgz
     version: 0.9.0
-generated: "2026-05-06T09:54:25.315455233Z"
+generated: "2026-05-06T09:55:06.897352722Z"
