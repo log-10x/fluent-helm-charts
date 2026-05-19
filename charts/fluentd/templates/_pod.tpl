@@ -77,15 +77,8 @@ containers:
     - name: FLUENTD_CONF
       value: "../../../etc/fluent/fluent.conf"
     {{- if .Values.tenx.enabled }}
-    - name: TENX_API_KEY
-    {{- if and .Values.tenx.apiKey (ne .Values.tenx.apiKey "NO-API-KEY") }}
-      valueFrom:
-        secretKeyRef:
-          name: {{ include "fluentd.fullname" . }}-tenx-api-key
-          key: api-key
-    {{- else }}
-      value: {{ .Values.tenx.apiKey | quote }}
-    {{- end }}
+    - name: TENX_LICENSE_FILE
+      value: /etc/tenx/license/license.jwt
     {{- if .Values.tenx.runtimeName }}
     - name: TENX_RUNTIME_NAME
       value: {{ .Values.tenx.runtimeName | quote }}
@@ -136,6 +129,11 @@ containers:
       mountPath: /etc/fluent
     - name: etcfluentd-config
       mountPath: /etc/fluent/config.d/
+    {{- if .Values.tenx.enabled }}
+    - name: tenx-license
+      mountPath: /etc/tenx/license
+      readOnly: true
+    {{- end }}
     {{- if $tenxGitInit }}
     - name: tenx-git
       mountPath: /etc/tenx/git
@@ -177,6 +175,14 @@ volumes:
   configMap:
     name: {{ include "fluentd.extraFilesConfigMapName" . }}
     defaultMode: 0777
+{{- if .Values.tenx.enabled }}
+- name: tenx-license
+  secret:
+    secretName: {{ default (printf "%s-tenx-license" (include "fluentd.fullname" .)) .Values.tenx.licenseSecret }}
+    items:
+      - key: license-jwt
+        path: license.jwt
+{{- end }}
 {{- if $tenxGitInit }}
 - name: tenx-git
   emptyDir: {}

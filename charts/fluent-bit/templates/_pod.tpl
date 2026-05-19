@@ -85,15 +85,8 @@ containers:
     imagePullPolicy: {{ .Values.image.pullPolicy }}
     env:
     {{- if .Values.tenx.enabled }}
-      - name: TENX_API_KEY
-    {{- if and .Values.tenx.apiKey (ne .Values.tenx.apiKey "NO-API-KEY") }}
-        valueFrom:
-          secretKeyRef:
-            name: {{ include "fluent-bit.fullname" . }}-tenx-api-key
-            key: api-key
-    {{- else }}
-        value: {{ .Values.tenx.apiKey | quote }}
-    {{- end }}
+      - name: TENX_LICENSE_FILE
+        value: /etc/tenx/license/license.jwt
       - name: FLUENT_BIT_CONF_FILE
         value: "/fluent-bit/etc/conf/tenx-main-receive.conf"
     {{- if .Values.tenx.runtimeName }}
@@ -166,6 +159,11 @@ containers:
     volumeMounts:
       - name: config
         mountPath: /fluent-bit/etc/conf
+    {{- if .Values.tenx.enabled }}
+      - name: tenx-license
+        mountPath: /etc/tenx/license
+        readOnly: true
+    {{- end }}
     {{- if $tenxGitInit }}
       - name: tenx-git
         mountPath: /etc/tenx/git
@@ -227,6 +225,14 @@ volumes:
   - name: config
     configMap:
       name: {{ default (include "fluent-bit.fullname" .) .Values.existingConfigMap }}
+{{- if .Values.tenx.enabled }}
+  - name: tenx-license
+    secret:
+      secretName: {{ default (printf "%s-tenx-license" (include "fluent-bit.fullname" .)) .Values.tenx.licenseSecret }}
+      items:
+        - key: license-jwt
+          path: license.jwt
+{{- end }}
 {{- if $tenxGitInit }}
   - name: tenx-git
     emptyDir: {}

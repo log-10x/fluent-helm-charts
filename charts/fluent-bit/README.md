@@ -58,8 +58,11 @@ Main switch to enable/disable 10x integration. Default: `true`
 ### tenx.variant
 Specifies the 10x distribution. Options: `jit` (default), `native`. For more details, see [10x Flavors](https://doc.log10x.com/architecture/flavors)
 
-### tenx.apiKey
-Your 10x API key for metrics reporting. Default: `"NO-API-KEY"`
+### tenx.licenseJwt
+Your Log10x license JWT (download from [console.log10x.com](https://console.log10x.com)). The chart creates a managed K8s Secret from this value and mounts it as a file at `/etc/tenx/license/license.jwt`. Required for the engine to start.
+
+### tenx.licenseSecret
+Name of an existing K8s Secret to use instead of having the chart create one. Must contain the JWT under data key `license-jwt`. Leave empty to use the chart-managed Secret built from `tenx.licenseJwt`.
 
 ### tenx.optimize
 Enable optimization mode to losslessly compact events for 50-65% volume reduction. Default: `false`. When disabled, the Receiver filters events but emits them in their original form.
