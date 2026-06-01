@@ -89,6 +89,10 @@ containers:
         value: /etc/tenx/license/license.jwt
       - name: FLUENT_BIT_CONF_FILE
         value: "/fluent-bit/etc/conf/tenx-main-receive.conf"
+    {{- if .Values.tenx.airgapped }}
+      - name: TENX_AIRGAPPED
+        value: "true"
+    {{- end }}
     {{- if .Values.tenx.runtimeName }}
       - name: TENX_RUNTIME_NAME
         value: {{ .Values.tenx.runtimeName | quote }}
