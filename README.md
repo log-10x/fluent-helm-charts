@@ -3,13 +3,13 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Release Status](https://github.com/log-10x/fluent-helm-charts/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/log-10x/fluent-helm-charts/actions/workflows/release.yaml)
 
-Helm charts for deploying Fluentd / Fluent-Bit with the 10x [Receiver](https://doc.log10x.com/apps/receiver/) app
+Helm charts for deploying Fluentd / Fluent-Bit with the [Log10x](https://www.log10x.com/?utm_source=github&utm_medium=readme&utm_campaign=fluent-helm-charts&utm_content=hero) [Receiver](https://doc.log10x.com/apps/receiver/) app
 
 The Fluentd and Fluent-Bit charts are built on top of the official [fluent helm charts](https://github.com/fluent/helm-charts), and work by replacing the base image with one which has [10x installed](https://doc.log10x.com/install/linux/) on it, as well as setting all the necessary [10x configuration](https://doc.log10x.com/run/input/forwarder/)
 
 For more details on how the images are created, see the [docker-images repo](https://github.com/log-10x/docker-images).
 
-The supported [10x distributions](https://doc.log10x.com/architecture/flavors/) are JIT Edge and Native Edge. Check out each individual chart values.yaml for full configuration options.
+The supported [10x distributions](https://doc.log10x.com/engine/flavors/) are JIT Edge and Native Edge. Check out each individual chart values.yaml for full configuration options.
 
 ## Usage
 
@@ -75,6 +75,6 @@ itself is open source, **using Log10x requires a commercial license**.
 
 **Get Started:**
 
-- [Log10x Pricing](https://log10x.com/pricing)
+- [Log10x Pricing](https://www.log10x.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=fluent-helm-charts&utm_content=footer)
 - [Documentation](https://doc.log10x.com)
 - [Contact Sales](mailto:sales@log10x.com)
