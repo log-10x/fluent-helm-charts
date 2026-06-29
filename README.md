@@ -9,7 +9,7 @@ The Fluentd and Fluent-Bit charts are built on top of the official [fluent helm 
 
 For more details on how the images are created, see the [docker-images repo](https://github.com/log-10x/docker-images).
 
-The supported [10x distributions](https://doc.log10x.com/architecture/flavors/) are JIT Edge and Native Edge. Check out each individual chart values.yaml for full configuration options.
+The supported [10x distributions](https://doc.log10x.com/engine/flavors/) are JIT Edge and Native Edge. Check out each individual chart values.yaml for full configuration options.
 
 ## Usage
 

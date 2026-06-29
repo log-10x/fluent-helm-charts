@@ -56,7 +56,7 @@ The chart includes the following 10x-specific configuration options:
 Main switch to enable/disable 10x integration. Default: `true`
 
 ### tenx.variant
-Specifies the 10x distribution. Options: `jit` (default), `native`. For more details, see [10x Flavors](https://doc.log10x.com/architecture/flavors)
+Specifies the 10x distribution. Options: `jit` (default), `native`. For more details, see [10x Flavors](https://doc.log10x.com/engine/flavors)
 
 ### tenx.apiKey
 Your 10x API key for metrics reporting. Default: `"NO-API-KEY"`
