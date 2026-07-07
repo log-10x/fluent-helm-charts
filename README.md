@@ -16,8 +16,7 @@
 > **[Receiver deployment guide](https://doc.log10x.com/apps/receiver/deploy/)**.
 >
 > The charts remain here and installable, but are marked `deprecated: true` and are no
-> longer maintained or recommended. (Filebeat stays live — it is the one genuinely
-> embedded forwarder — in [elastic-helm-charts](https://github.com/log-10x/elastic-helm-charts).)
+> longer maintained or recommended.
 
 Helm charts for deploying Fluentd / Fluent-Bit with the [Log10x](https://www.log10x.com/?utm_source=github&utm_medium=readme&utm_campaign=fluent-helm-charts&utm_content=hero) [Receiver](https://doc.log10x.com/apps/receiver/) app
 
