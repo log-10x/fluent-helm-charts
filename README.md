@@ -3,6 +3,22 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Release Status](https://github.com/log-10x/fluent-helm-charts/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/log-10x/fluent-helm-charts/actions/workflows/release.yaml)
 
+> [!WARNING]
+> **Deprecated (kept for reference / legacy installs).** These charts use the old
+> image-swap model: a fork of the official fluent chart whose base image is replaced
+> with a `log10x/fluentd-10x` / `log10x/fluent-bit-10x` build that runs the 10x Engine
+> **in-process, inside the forwarder container**.
+>
+> The current model runs 10x as a separate `log10x/edge-10x` **sidecar container** on the
+> **official upstream** [`fluent/fluentd`](https://github.com/fluent/helm-charts) and
+> [`fluent/fluent-bit`](https://github.com/fluent/helm-charts) charts via a values overlay
+> (or a kustomize post-renderer for Fluentd), over loopback TCP. See the
+> **[Receiver deployment guide](https://doc.log10x.com/apps/receiver/deploy/)**.
+>
+> The charts remain here and installable, but are marked `deprecated: true` and are no
+> longer maintained or recommended. (Filebeat stays live — it is the one genuinely
+> embedded forwarder — in [elastic-helm-charts](https://github.com/log-10x/elastic-helm-charts).)
+
 Helm charts for deploying Fluentd / Fluent-Bit with the [Log10x](https://www.log10x.com/?utm_source=github&utm_medium=readme&utm_campaign=fluent-helm-charts&utm_content=hero) [Receiver](https://doc.log10x.com/apps/receiver/) app
 
 The Fluentd and Fluent-Bit charts are built on top of the official [fluent helm charts](https://github.com/fluent/helm-charts), and work by replacing the base image with one which has [10x installed](https://doc.log10x.com/install/linux/) on it, as well as setting all the necessary [10x configuration](https://doc.log10x.com/run/input/forwarder/)
