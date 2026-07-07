@@ -1,0 +1,139 @@
+# Fluentd 10x Helm Chart Changelog
+
+> [!NOTE]
+> All notable changes to this project will be documented in this file; the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+<!--
+### Added - For new features.
+### Changed - For changes in existing functionality.
+### Deprecated - For soon-to-be removed features.
+### Removed - For now removed features.
+### Fixed - For any bug fixes.
+### Security - In case of vulnerabilities.
+-->
+
+## [UNRELEASED]
+
+## [v1.0.20] - 2026-05-06
+
+### Changed
+
+- Chart values use 00_tenx_receive.conf paths into the Receiver modules tree (tenx-receive-unix.conf). Default mode emits the Prometheus tenx_app=receiver label.
+- Sample values file is fluentd-receive.yaml for the default filter mode.
+
+## [v1.0.19] - 2026-05-02
+
+### Changed
+
+- Bumped engine appVersion to 1.0.19 with the Receiver app rename and renamed engine options. Chart now launches the engine with receiverOptimize and receiverReadOnly options.
+- Chart prose and values comments updated to reference Receiver instead of Reducer. The Prometheus label tenx_app value reducer is unchanged.
+
+## [v1.0.17] - 2026-05-02
+
+### Changed
+
+- Bumped engine appVersion to 1.0.17 with the Receiver app rename baked in. Bundled modules now ship apps slash receiver in place of apps slash reducer. Chart launch args target the receiver app.
+- Chart prose and values comments updated to reference Receiver instead of Reducer. Engine identifiers receiverOptimize and receiverReadOnly are preserved unchanged.
+
+## [v1.0.16] - 2026-05-02
+
+### Changed
+
+- Bumped engine appVersion to 1.0.16 with the Receiver app rename baked in.
+
+## [v1.0.13] - 2026-04-29
+
+### Added
+
+- New `tenx.readOnly` value (default `false`) — non-intervening reporter mode. When `true`, the embedded 10x sub-process reads, aggregates, and publishes `TenXSummary` metrics to the Log10x backend, but does **not** write events back to Fluentd. Events continue through the original Fluentd pipeline to the configured outputs unchanged. Replaces the prior `@apps/reporter` pairing for non-Fluent-Bit-DaemonSet integrations.
+- `00_tenx_report.conf` and `04_outputs_report.conf` entries under `tenx.fileConfigs` — mode-specific configs used when `tenx.readOnly: true`. The first launches the 10x exec_filter with `receiverReadOnly true` (no return source); the second routes `@OUTPUT` through a `<copy>` that fans out to BOTH `@TENX` (for aggregation; no return loop) AND `@FINAL-OUTPUT` (the original Fluentd output pipeline, untouched).
+- Mutual-exclusion guard between `tenx.readOnly` and `tenx.optimize` in a dedicated `templates/tenx-validate.yaml` — fires on every `helm install`/`upgrade`, including when the user supplies `extraFilesConfigMapNameOverride` and bypasses the rendered ConfigMap.
+
+### Changed
+
+- ConfigMap rendering (`templates/fluentd-configurations-cm.yaml`) now selects the right `00_tenx_*.conf` and `04_outputs*.conf` pair based on `tenx.readOnly` and `tenx.optimize`. Templates output (`tenx.outputConfigs` entries containing `templates`) is only emitted in optimize mode.
+
+## [v1.0.12] - 2026-04-28
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.12 — completes the streamer→retriever rename inside the engine. Pipeline app paths emitted at runtime now resolve to `@apps/retriever/*` (previously `@apps/streamer/*` against engine-bundled stale modules), and the forward-output Fluentd tag for retriever stream events is now `tenx-cloud-retriever` (previously `tenx-cloud-streamer`).
+
+## [v1.0.9] - 2026-04-28
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.9
+
+## [v1.0.8] - 2026-04-25
+
+### Changed
+
+- Renamed regulator to reducer (cosmetic) — `regulatorOptimize` env → `receiverOptimize`. Pipeline action verb `regulate` and config filenames preserved. Companion to log-10x/modules#21 and log-10x/config#20.
+
+## [v1.0.7] - 2026-04-22
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.7
+
+### Removed
+
+- Removed `tenx.kind` option (report/regulate/optimize) — chart is now hardcoded to reducer mode
+- Removed reporter and optimizer fluentd conf entries — use reducer with `tenx.optimize=true` for optimization
+
+### Added
+
+- Added `tenx.optimize` flag (default `false`) to enable optimization mode (lossless event compaction)
+
+## [v1.0.6] - 2026-03-25
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.6
+
+## [v1.0.5] - 2026-03-22
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.5
+
+## [v1.0.0] - 2026-03-22
+
+### Changed
+
+- Upgraded 10x engine to appVersion 1.0.0
+
+## [v0.9.7] - 2026-03-10
+
+### Changed
+
+- Added custom configuration option via volume mount
+- Switched github config fetcher to git agnostic one
+
+## [v0.9.5] - 2026-03-05
+
+### Changed
+
+- Upgraded 10x engine to appVersion 0.9.5.
+- Switch 10x images from GHCR to Docker Hub
+
+## [v0.9.0] - 2026-02-06
+
+### Changed
+
+- Added 10x Observability engine integration to fluentd.
+- Added fluent keyword to chart metadata.
+- Updated container image to use Log10x fluentd-10x image.
+- Added 10x configuration options (report, regulate, optimize modes).
+- Added GitHub config fetcher init container for fetching config and symbols.
+- Updated maintainers and sources to Log10x.
+
+<!--
+RELEASE LINKS
+-->
+[UNRELEASED]: https://github.com/log-10x/fluent-helm-charts/tree/main/charts/fluentd
+[v0.9.7]: https://github.com/log-10x/fluent-helm-charts/releases/tag/fluentd-0.9.7
+[v0.9.5]: https://github.com/log-10x/fluent-helm-charts/releases/tag/fluentd-0.9.5
+[v0.9.0]: https://github.com/log-10x/fluent-helm-charts/releases/tag/fluentd-0.9.0
+[v0.2.1]: https://github.com/log-10x/fluent-helm-charts/releases/tag/fluentd-0.2.1

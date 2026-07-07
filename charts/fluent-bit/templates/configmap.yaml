@@ -1,0 +1,48 @@
+{{- if not .Values.existingConfigMap -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluent-bit.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "fluent-bit.labels" . | nindent 4 }}
+data:
+  custom_parsers.conf: |
+    {{- (tpl .Values.config.customParsers $) | nindent 4 }}
+  {{- if .Values.tenx.enabled }}
+  fluent-bit.conf: |
+    {{- (tpl .Values.config.service $)  | nindent 4 }}
+    {{- (tpl .Values.config.inputs $)  | nindent 4 }}
+  {{- if not .Values.tenx.readOnly }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-readback.conf") $) | nindent 4 }}
+  {{- end }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-log-input.conf") $) | nindent 4 }}
+    {{- (tpl .Values.config.filters $)  | nindent 4 }}
+  {{- if .Values.tenx.readOnly }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-report.conf") $) | nindent 4 }}
+  {{- else if .Values.tenx.optimize }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-optimize.conf") $) | nindent 4 }}
+  {{- else }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-receive.conf") $) | nindent 4 }}
+  {{- end }}
+    {{- (tpl .Values.config.outputs $)  | nindent 4 }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-log-output.conf") $) | nindent 4 }}
+  {{- if and (not .Values.tenx.readOnly) .Values.tenx.optimize }}
+    {{- (tpl (index .Values.tenx.configFiles "tenx-templates-output.conf") $) | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  fluent-bit.conf: |
+    {{- (tpl .Values.config.service $)  | nindent 4 }}
+    {{- (tpl .Values.config.inputs $)  | nindent 4 }}
+    {{- (tpl .Values.config.filters $)  | nindent 4 }}
+    {{- (tpl .Values.config.outputs $)  | nindent 4 }}
+  {{- end }}
+  {{- range $key, $val := .Values.config.upstream }}
+  {{ $key }}: |
+    {{- (tpl $val $) | nindent 4 }}
+  {{- end }}
+  {{- range $key, $val := .Values.config.extraFiles }}
+  {{ $key }}: |
+    {{- (tpl $val $) | nindent 4 }}
+  {{- end }}
+{{- end -}}

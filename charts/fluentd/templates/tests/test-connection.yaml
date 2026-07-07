@@ -1,0 +1,34 @@
+{{/*
+Target the very simple case where
+fluentd is deployed with the default values
+If the fluentd config is overriden and the metrics server removed
+this will fail.
+*/}}
+{{ if empty .Values.service.ports }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "fluentd.fullname" . }}-test-connection"
+  labels:
+    # Note: Using "-test" suffix on app name to avoid matching the DaemonSet
+    # selector, which would cause the controller to delete this pod as an orphan
+    helm.sh/chart: {{ include "fluentd.chart" . }}
+    app.kubernetes.io/name: {{ include "fluentd.name" . }}-test
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command:
+        - sh
+        - -c
+        - |
+          set -e
+          # Give fluentd some time to start up
+          while :; do nc -vz {{ include "fluentd.fullname" . }}:24231 && break; sleep 1; done
+          wget '{{ include "fluentd.fullname" . }}:24231/metrics'
+  restartPolicy: Never
+{{ end }}

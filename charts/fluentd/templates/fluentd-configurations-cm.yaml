@@ -1,0 +1,84 @@
+{{- if not .Values.extraFilesConfigMapNameOverride }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config-{{ include "fluentd.shortReleaseName" . }}
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+data:
+{{- range $key, $value := .Values.fileConfigs }}
+  {{$key }}: |-
+    {{- $value | nindent 4 }}
+{{- end }}
+{{- if .Values.tenx.enabled }}
+{{- /*
+  Mode-specific tenx.fileConfigs entries are picked below. Skip the prefixed
+  variants here (00_tenx_*, 04_outputs*) — only emit the right one for the mode.
+*/}}
+{{- range $key, $value := .Values.tenx.fileConfigs }}
+{{- if ne $key "TenXLogs" }}
+{{- if and (not (hasPrefix "00_tenx_" $key)) (not (hasPrefix "04_outputs" $key)) }}
+  {{$key }}: |-
+    {{- $value | nindent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if $.Values.tenx.readOnly }}
+  00_tenx.conf: |-
+    {{- (index .Values.tenx.fileConfigs "00_tenx_report.conf") | nindent 4 }}
+  04_outputs.conf: |-
+    {{- (index .Values.tenx.fileConfigs "04_outputs_report.conf") | nindent 4 }}
+{{- else if $.Values.tenx.optimize }}
+  00_tenx.conf: |-
+    {{- (index .Values.tenx.fileConfigs "00_tenx_optimize.conf") | nindent 4 }}
+  04_outputs.conf: |-
+    {{- (index .Values.tenx.fileConfigs "04_outputs.conf") | nindent 4 }}
+{{- else }}
+  00_tenx.conf: |-
+    {{- (index .Values.tenx.fileConfigs "00_tenx_receive.conf") | nindent 4 }}
+  04_outputs.conf: |-
+    {{- (index .Values.tenx.fileConfigs "04_outputs.conf") | nindent 4 }}
+{{- end }}
+{{- range $key, $value := .Values.tenx.outputConfigs }}
+{{- /* Templates output is only relevant in optimize mode (compacted events emit templates). */}}
+{{- if or (and $.Values.tenx.optimize (not $.Values.tenx.readOnly)) (not (contains "templates" $key)) }}
+  {{$key }}: |-
+    {{- $value | nindent 4 }}
+{{- end }}
+{{- end }}
+{{- range $key, $value := .Values.tenx.fileConfigs.TenXLogs }}
+  {{$key }}: |-
+    {{- $value | nindent 4 }}
+{{- end }}
+{{- else }}
+{{- range $key, $value := .Values.originalFluentOutput }}
+  {{$key }}: |-
+    {{- $value | nindent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if not .Values.mainConfigMapNameOverride }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-main-{{ include "fluentd.shortReleaseName" . }}
+  labels:
+    {{- include "fluentd.labels" . | nindent 4 }}
+data:
+  fluent.conf: |-
+    # do not collect fluentd logs to avoid infinite loops.
+    <label @FLUENT_LOG>
+      <match **>
+        @type null
+        @id ignore_fluent_logs
+      </match>
+    </label>
+
+    @include config.d/*.conf
+    {{- range $key := .Values.configMapConfigs }}
+    {{- print "@include " $key ".d/*"  | nindent 4 }}
+    {{- end }}
+{{- end }}
